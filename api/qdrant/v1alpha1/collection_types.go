@@ -20,14 +20,12 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// InstanceSpec defines the desired state of Instance
-type InstanceSpec struct {
-	// +optional
-	Image string `json:"image,omitempty"`
+// CollectionSpec defines the desired state of Collection
+type CollectionSpec struct {
 }
 
-// InstanceStatus defines the observed state of Instance
-type InstanceStatus struct {
+// CollectionStatus defines the observed state of Collection
+type CollectionStatus struct {
 	Phase              string             `json:"phase"`
 	Conditions         []metav1.Condition `json:"conditions,omitempty"`
 	ObservedGeneration int64              `json:"observedGeneration,omitempty"`
@@ -37,20 +35,20 @@ type InstanceStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// Instance is the Schema for the instances API
-type Instance struct {
+// Collection is the Schema for the collections API
+type Collection struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   InstanceSpec   `json:"spec,omitempty"`
-	Status InstanceStatus `json:"status,omitempty"`
+	Spec   CollectionSpec   `json:"spec,omitempty"`
+	Status CollectionStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// InstanceList contains a list of Instance
-type InstanceList struct {
+// CollectionList contains a list of Collection
+type CollectionList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Instance `json:"items"`
+	Items           []Collection `json:"items"`
 }

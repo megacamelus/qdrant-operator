@@ -17,7 +17,7 @@ limitations under the License.
 // Package v1alph1 contains API Schema definitions for the qdrant v1alph1 API group
 // +kubebuilder:object:generate=true
 // +groupName=qdrant.lburgazzoli.github.io
-package v1alph1
+package v1alpha1
 
 import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -37,3 +37,13 @@ var (
 	// AddToScheme adds the types in this group-version to the given scheme.
 	AddToScheme = SchemeBuilder.AddToScheme
 )
+
+func init() {
+	SchemeBuilder.Register(&Instance{}, &InstanceList{})
+	SchemeBuilder.Register(&Collection{}, &CollectionList{})
+}
+
+// Resource takes an unqualified resource and returns a Group qualified GroupResource.
+func Resource(resource string) schema.GroupResource {
+	return SchemeGroupVersion.WithResource(resource).GroupResource()
+}

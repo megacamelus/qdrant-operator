@@ -66,11 +66,17 @@ func (a *serviceAction) service(ctx context.Context, rr *ReconciliationRequest) 
 		WithOwnerReferences(apply.WithOwnerReference(rr.Instance)).
 		WithLabels(Labels(rr.Instance)).
 		WithSpec(corev1ac.ServiceSpec().
-			WithPorts(corev1ac.ServicePort().
-				WithName(qdrant.QdrantPortType).
-				WithProtocol(corev1.ProtocolTCP).
-				WithPort(qdrant.QdrantPort).
-				WithTargetPort(intstr.FromString(qdrant.QdrantPortType))).
+			WithPorts(
+				corev1ac.ServicePort().
+					WithName(qdrant.QdrantHttpPortType).
+					WithProtocol(corev1.ProtocolTCP).
+					WithPort(qdrant.QdrantHttpPort).
+					WithTargetPort(intstr.FromString(qdrant.QdrantHttpPortType)),
+				corev1ac.ServicePort().
+					WithName(qdrant.QdrantGrpcPortType).
+					WithProtocol(corev1.ProtocolTCP).
+					WithPort(qdrant.QdrantGrpcPort).
+					WithTargetPort(intstr.FromString(qdrant.QdrantGrpcPortType))).
 			WithSelector(LabelsForSelector(rr.Instance)).
 			WithSessionAffinity(corev1.ServiceAffinityNone).
 			WithPublishNotReadyAddresses(true))

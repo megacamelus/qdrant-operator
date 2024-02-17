@@ -1,0 +1,12 @@
+apiVersion: qdrant.lburgazzoli.github.io/v1alpha1
+kind: Collection
+metadata:
+  labels:
+    app.kubernetes.io/name: collection
+    app.kubernetes.io/instance: collection-sample
+    app.kubernetes.io/part-of: qdrant-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: qdrant-operator
+  name: collection-sample
+spec:
+  # TODO(user): Add fields here

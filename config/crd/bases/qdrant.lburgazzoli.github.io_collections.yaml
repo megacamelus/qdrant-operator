@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: instances.qdrant.lburgazzoli.github.io
+  name: collections.qdrant.lburgazzoli.github.io
 spec:
   group: qdrant.lburgazzoli.github.io
   names:
-    kind: Instance
-    listKind: InstanceList
-    plural: instances
-    singular: instance
+    kind: Collection
+    listKind: CollectionList
+    plural: collections
+    singular: collection
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Instance is the Schema for the instances API
+        description: Collection is the Schema for the collections API
         properties:
           apiVersion:
             description: |-
@@ -37,13 +37,10 @@ spec:
           metadata:
             type: object
           spec:
-            description: InstanceSpec defines the desired state of Instance
-            properties:
-              image:
-                type: string
+            description: CollectionSpec defines the desired state of Collection
             type: object
           status:
-            description: InstanceStatus defines the observed state of Instance
+            description: CollectionStatus defines the observed state of Collection
             properties:
               conditions:
                 items:

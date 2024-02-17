@@ -105,9 +105,11 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 						WithImage(image).
 						WithImagePullPolicy(corev1.PullAlways).
 						WithName(qdrant.QdrantAppName).
-						WithPorts(apply.WithPort(qdrant.QdrantPortType, qdrant.QdrantPort)).
-						WithReadinessProbe(apply.WithHTTPProbe(qdrant.QdrantReadinessProbePath, qdrant.QdrantPort)).
-						WithLivenessProbe(apply.WithHTTPProbe(qdrant.QdrantLivenessProbePath, qdrant.QdrantPort)).
+						WithPorts(
+							apply.WithPort(qdrant.QdrantHttpPortType, qdrant.QdrantHttpPort),
+							apply.WithPort(qdrant.QdrantGrpcPortType, qdrant.QdrantGrpcPort)).
+						WithReadinessProbe(apply.WithHTTPProbe(qdrant.QdrantReadinessProbePath, qdrant.QdrantHttpPort)).
+						WithLivenessProbe(apply.WithHTTPProbe(qdrant.QdrantLivenessProbePath, qdrant.QdrantHttpPort)).
 						WithEnv(envs...).
 						WithResources(corev1ac.ResourceRequirements().WithRequests(corev1.ResourceList{
 							corev1.ResourceMemory: QdrantInstanceDefaultMemory,

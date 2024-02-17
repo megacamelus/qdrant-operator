@@ -1,0 +1,31 @@
+# permissions for end users to edit collections.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: collection-editor-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: qdrant-operator
+    app.kubernetes.io/part-of: qdrant-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: collection-editor-role
+rules:
+- apiGroups:
+  - qdrant.lburgazzoli.github.io
+  resources:
+  - collections
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - qdrant.lburgazzoli.github.io
+  resources:
+  - collections/status
+  verbs:
+  - get
