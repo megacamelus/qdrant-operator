@@ -56,6 +56,7 @@ func NewInstanceReconciler(manager ctrl.Manager) (*InstanceReconciler, error) {
 
 	rec.actions = make([]Action, 0)
 	rec.actions = append(rec.actions, NewServiceAction())
+	rec.actions = append(rec.actions, NewPersistentVolumeClaimAction())
 	rec.actions = append(rec.actions, NewDeployAction())
 
 	return &rec, nil
@@ -74,6 +75,7 @@ type InstanceReconciler struct {
 // +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=instances/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=instances/finalizers,verbs=update
 // +kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups="",resources=persistentvolumeclaims,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
 
 // SetupWithManager sets up the controller with the Manager.

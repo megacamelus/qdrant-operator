@@ -33,6 +33,7 @@ import (
 var (
 	QdrantInstanceDefaultMemory = resource.MustParse("600Mi")
 	QdrantInstanceDefaultCPU    = resource.MustParse("500m")
+	QdrantInstanceStorage       = resource.MustParse("1Gi")
 )
 
 type ReconciliationRequest struct {
