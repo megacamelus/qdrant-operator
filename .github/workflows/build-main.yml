@@ -1,0 +1,28 @@
+name: Build Main
+
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    uses: ./.github/workflows/e2e.yml
+  deploy:
+    needs:
+      - e2e
+    uses: ./.github/workflows/build-and-push.yml
+    with:
+      version: "${{ github.ref_name }}-${{ github.sha }}"
+      olm: false
+      tag: main
+      latest: true
+    secrets:
+      registry: "quay.io"
+      registry-username: ${{ secrets.QUAY_USERNAME }}
+      registry-password: ${{ secrets.QUAY_PASSWORD }}

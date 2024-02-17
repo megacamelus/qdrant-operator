@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: qdrant-operator
+rules:
+- apiGroups:
+  - qdrant.lburgazzoli.github.io
+  resources:
+  - instances
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - qdrant.lburgazzoli.github.io
+  resources:
+  - instances/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - qdrant.lburgazzoli.github.io
+  resources:
+  - instances/status
+  verbs:
+  - get
+  - patch
+  - update

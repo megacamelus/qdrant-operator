@@ -1,0 +1,20 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: rolebinding
+    app.kubernetes.io/instance: qdrant-operator-leader-election-rolebinding
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: qdrant-operator
+    app.kubernetes.io/part-of: qdrant-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: qdrant-operator-leader-election
+  namespace: qdrant-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: qdrant-operator-leader-election
+subjects:
+- kind: ServiceAccount
+  name: qdrant-operator
+  namespace: qdrant-system

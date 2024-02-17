@@ -1,0 +1,11 @@
+apiVersion: designer.qdrant.io/v1alpha1
+kind: Kaoto
+metadata:
+  labels:
+    app.kubernetes.io/name: qdrant
+    app.kubernetes.io/instance: qdrant-demo
+    app.kubernetes.io/part-of: qdrant-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: qdrant-operator
+  name: qdrant-demo
+spec: {}
