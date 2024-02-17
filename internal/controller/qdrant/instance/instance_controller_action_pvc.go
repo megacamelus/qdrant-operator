@@ -2,6 +2,7 @@ package instance
 
 import (
 	"context"
+
 	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
 	"github.com/lburgazzoli/qdrant-operator/pkg/apply"
 	"github.com/lburgazzoli/qdrant-operator/pkg/controller/client"

@@ -91,7 +91,7 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 
 	return appsv1ac.Deployment(rr.Instance.Name, rr.Instance.Namespace).
 		WithOwnerReferences(apply.WithOwnerReference(rr.Instance)).
-		WithLabels(Labels(rr.Instance)).
+		WithLabels(labels).
 		WithSpec(appsv1ac.DeploymentSpec().
 			WithReplicas(1).
 			WithSelector(metav1ac.LabelSelector().WithMatchLabels(labels)).
@@ -101,10 +101,17 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 					WithSecurityContext(corev1ac.PodSecurityContext().
 						WithRunAsNonRoot(true).
 						WithSeccompProfile(corev1ac.SeccompProfile().WithType(corev1.SeccompProfileTypeRuntimeDefault))).
-					WithVolumes(corev1ac.Volume().
-						WithName(rr.Instance.Name + "-storage").
-						WithPersistentVolumeClaim(corev1ac.PersistentVolumeClaimVolumeSource().
-							WithClaimName(rr.Instance.Name))).
+					WithVolumes(
+						corev1ac.Volume().
+							WithName(rr.Instance.Name+"-storage").
+							WithPersistentVolumeClaim(corev1ac.PersistentVolumeClaimVolumeSource().
+								WithClaimName(rr.Instance.Name)),
+						corev1ac.Volume().
+							WithName(rr.Instance.Name+"-snapshot").
+							WithEmptyDir(corev1ac.EmptyDirVolumeSource()),
+						corev1ac.Volume().
+							WithName(rr.Instance.Name+"-init").
+							WithEmptyDir(corev1ac.EmptyDirVolumeSource())).
 					WithContainers(corev1ac.Container().
 						WithImage(image).
 						WithImagePullPolicy(corev1.PullAlways).
@@ -122,5 +129,15 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 						WithSecurityContext(corev1ac.SecurityContext().
 							WithAllowPrivilegeEscalation(false).
 							WithRunAsNonRoot(true).
-							WithSeccompProfile(corev1ac.SeccompProfile().WithType(corev1.SeccompProfileTypeRuntimeDefault)))))))
+							WithSeccompProfile(corev1ac.SeccompProfile().WithType(corev1.SeccompProfileTypeRuntimeDefault))).
+						WithVolumeMounts(
+							corev1ac.VolumeMount().
+								WithName(rr.Instance.Name+"-storage").
+								WithMountPath("/qdrant/storage"),
+							corev1ac.VolumeMount().
+								WithName(rr.Instance.Name+"-snapshot").
+								WithMountPath("/qdrant/snapshot"),
+							corev1ac.VolumeMount().
+								WithName(rr.Instance.Name+"-init").
+								WithMountPath("/qdrant/init"))))))
 }

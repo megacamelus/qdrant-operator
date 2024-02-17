@@ -16,9 +16,13 @@ limitations under the License.
 
 package qdrant
 
+import (
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/selection"
+)
+
 const (
 	QdrantAppName              string = "qdrant"
-	QdrantComponentInstance    string = "instance"
 	QdrantOperatorFieldManager string = "qdrant-operator"
 	QdrantHttpPort             int32  = 6333
 	QdrantHttpPortType         string = "http"
@@ -33,3 +37,15 @@ const (
 	KubernetesLabelAppPartOf    = "app.kubernetes.io/part-of"
 	KubernetesLabelAppManagedBy = "app.kubernetes.io/managed-by"
 )
+
+func AppSelector() (labels.Selector, error) {
+	appName, err := labels.NewRequirement(KubernetesLabelAppPartOf, selection.Equals, []string{QdrantAppName})
+	if err != nil {
+		return nil, err
+	}
+
+	selector := labels.NewSelector().
+		Add(*appName)
+
+	return selector, nil
+}

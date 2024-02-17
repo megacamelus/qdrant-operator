@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package instance
+package collection
 
 import (
 	"context"
@@ -22,7 +22,6 @@ import (
 
 	qdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
 
-	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/types"
 
 	"sigs.k8s.io/controller-runtime/pkg/builder"
@@ -31,30 +30,24 @@ import (
 )
 
 const (
-	AppName string = "instance"
-)
-
-var (
-	QdrantInstanceDefaultMemory = resource.MustParse("600Mi")
-	QdrantInstanceDefaultCPU    = resource.MustParse("500m")
-	QdrantInstanceStorage       = resource.MustParse("1Gi")
+	AppName string = "collection"
 )
 
 type ReconciliationRequest struct {
 	*client.Client
 
-	Instance *qdrantv1alpha1.Instance
+	Collection *qdrantv1alpha1.Collection
 }
 
 func (rr *ReconciliationRequest) Key() types.NamespacedName {
 	return types.NamespacedName{
-		Namespace: rr.Instance.Namespace,
-		Name:      rr.Instance.Name,
+		Namespace: rr.Collection.Namespace,
+		Name:      rr.Collection.Name,
 	}
 }
 
 func (rr *ReconciliationRequest) String() string {
-	return fmt.Sprintf("%s/%s", rr.Instance.Namespace, rr.Instance.Name)
+	return fmt.Sprintf("%s/%s", rr.Collection.Namespace, rr.Collection.Name)
 }
 
 type Action interface {

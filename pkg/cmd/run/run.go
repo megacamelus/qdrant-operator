@@ -1,7 +1,10 @@
 package run
 
 import (
+	"context"
 	"fmt"
+	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
+	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/collection"
 	"runtime"
 
 	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/instance"
@@ -28,7 +31,6 @@ func init() {
 }
 
 func NewRunCmd() *cobra.Command {
-
 	options := controller.Options{
 		MetricsAddr:                   ":8080",
 		ProbeAddr:                     ":8081",
@@ -44,29 +46,7 @@ func NewRunCmd() *cobra.Command {
 		Short: "run",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return controller.Start(options, func(manager manager.Manager, opts controller.Options) error {
-				l := ctrl.Log.WithName("run")
-				l.Info(fmt.Sprintf("Go Version: %s", runtime.Version()))
-				l.Info(fmt.Sprintf("Go OS/Arch: %s/%s", runtime.GOOS, runtime.GOARCH))
-				l.Info(fmt.Sprintf("Qdrant Image: %s", defaults.QdrantImage))
-
-				selector, err := instance.AppSelector()
-				if err != nil {
-					return errors.Wrap(err, "unable to compute cache's watch selector")
-				}
-
-				options.WatchSelectors = map[rtclient.Object]rtcache.ByObject{
-					&appsv1.Deployment{}:         {Label: selector},
-					&corev1.Secret{}:             {Label: selector},
-					&rbacv1.ClusterRoleBinding{}: {Label: selector},
-					&corev1.ServiceAccount{}:     {Label: selector},
-				}
-
-				rec, err := instance.NewInstanceReconciler(manager)
-				if err != nil {
-					return err
-				}
-
-				return rec.SetupWithManager(cmd.Context(), manager)
+				return start(cmd.Context(), manager, opts)
 			})
 		},
 	}
@@ -81,4 +61,43 @@ func NewRunCmd() *cobra.Command {
 	cmd.Flags().StringVar(&options.PprofAddr, "pprof-bind-address", options.PprofAddr, "The address the pprof endpoint binds to.")
 
 	return &cmd
+}
+
+func start(ctx context.Context, manager manager.Manager, opts controller.Options) error {
+	l := ctrl.Log.WithName("run")
+	l.Info(fmt.Sprintf("Go Version: %s", runtime.Version()))
+	l.Info(fmt.Sprintf("Go OS/Arch: %s/%s", runtime.GOOS, runtime.GOARCH))
+	l.Info(fmt.Sprintf("Qdrant Image: %s", defaults.QdrantImage))
+
+	selector, err := qdrant.AppSelector()
+	if err != nil {
+		return errors.Wrap(err, "unable to compute cache's watch selector")
+	}
+
+	opts.WatchSelectors = map[rtclient.Object]rtcache.ByObject{
+		&appsv1.Deployment{}:         {Label: selector},
+		&corev1.Secret{}:             {Label: selector},
+		&rbacv1.ClusterRoleBinding{}: {Label: selector},
+		&corev1.ServiceAccount{}:     {Label: selector},
+	}
+
+	irec, err := instance.NewInstanceReconciler(manager)
+	if err != nil {
+		return err
+	}
+
+	if err := irec.SetupWithManager(ctx, manager); err != nil {
+		return errors.Wrap(err, "unable to setup Instance reconciler")
+	}
+
+	crec, err := collection.NewCollectionReconciler(manager)
+	if err != nil {
+		return err
+	}
+
+	if err := crec.SetupWithManager(ctx, manager); err != nil {
+		return errors.Wrap(err, "unable to setup Collection reconciler")
+	}
+
+	return nil
 }
