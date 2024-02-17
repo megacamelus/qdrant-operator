@@ -18,18 +18,25 @@ package v1alph1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 // InstanceSpec defines the desired state of Instance
 type InstanceSpec struct {
+	// +optional
+	Image string `json:"image,omitempty"`
 }
 
 // InstanceStatus defines the observed state of Instance
 type InstanceStatus struct {
+	Phase              string             `json:"phase"`
+	Conditions         []metav1.Condition `json:"conditions,omitempty"`
+	ObservedGeneration int64              `json:"observedGeneration,omitempty"`
+	Endpoint           string             `json:"endpoint,omitempty"`
 }
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Instance is the Schema for the instances API
 type Instance struct {
@@ -40,7 +47,7 @@ type Instance struct {
 	Status InstanceStatus `json:"status,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // InstanceList contains a list of Instance
 type InstanceList struct {
@@ -51,4 +58,9 @@ type InstanceList struct {
 
 func init() {
 	SchemeBuilder.Register(&Instance{}, &InstanceList{})
+}
+
+// Resource takes an unqualified resource and returns a Group qualified GroupResource.
+func Resource(resource string) schema.GroupResource {
+	return SchemeGroupVersion.WithResource(resource).GroupResource()
 }

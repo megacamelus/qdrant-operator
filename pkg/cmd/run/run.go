@@ -4,13 +4,20 @@ import (
 	"fmt"
 	"runtime"
 
+	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/instance"
+	"github.com/pkg/errors"
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
+	rbacv1 "k8s.io/api/rbac/v1"
+	rtcache "sigs.k8s.io/controller-runtime/pkg/cache"
+	rtclient "sigs.k8s.io/controller-runtime/pkg/client"
+
 	"github.com/lburgazzoli/qdrant-operator/pkg/controller"
 	"github.com/lburgazzoli/qdrant-operator/pkg/defaults"
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
 	qdrantApi "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
-	routev1 "github.com/openshift/api/route/v1"
 
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -18,7 +25,6 @@ import (
 
 func init() {
 	utilruntime.Must(qdrantApi.AddToScheme(controller.Scheme))
-	utilruntime.Must(routev1.Install(controller.Scheme))
 }
 
 func NewRunCmd() *cobra.Command {
@@ -43,29 +49,24 @@ func NewRunCmd() *cobra.Command {
 				l.Info(fmt.Sprintf("Go OS/Arch: %s/%s", runtime.GOOS, runtime.GOARCH))
 				l.Info(fmt.Sprintf("Qdrant Image: %s", defaults.QdrantImage))
 
-				/*
-					selector, err := designer.AppSelector()
-					if err != nil {
-						return errors.Wrap(err, "unable to compute cache's watch selector")
-					}
+				selector, err := instance.AppSelector()
+				if err != nil {
+					return errors.Wrap(err, "unable to compute cache's watch selector")
+				}
 
-					options.WatchSelectors = map[rtclient.Object]rtcache.ByObject{
-						&appsv1.Deployment{}:         {Label: selector},
-						&netv1.Ingress{}:             {Label: selector},
-						&routev1.Route{}:             {Label: selector},
-						&corev1.Secret{}:             {Label: selector},
-						&rbacv1.ClusterRoleBinding{}: {Label: selector},
-						&corev1.ServiceAccount{}:     {Label: selector},
-					}
-				*/
+				options.WatchSelectors = map[rtclient.Object]rtcache.ByObject{
+					&appsv1.Deployment{}:         {Label: selector},
+					&corev1.Secret{}:             {Label: selector},
+					&rbacv1.ClusterRoleBinding{}: {Label: selector},
+					&corev1.ServiceAccount{}:     {Label: selector},
+				}
 
-				//rec, err := designer.NewKaotoReconciler(manager)
-				//if err != nil {
-				//	return err
-				//}
+				rec, err := instance.NewInstanceReconciler(manager)
+				if err != nil {
+					return err
+				}
 
-				//return rec.SetupWithManager(cmd.Context(), manager)
-				return nil
+				return rec.SetupWithManager(cmd.Context(), manager)
 			})
 		},
 	}

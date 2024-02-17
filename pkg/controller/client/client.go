@@ -1,8 +1,6 @@
 package client
 
 import (
-	route "github.com/openshift/client-go/route/clientset/versioned"
-	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
@@ -21,7 +19,6 @@ type Client struct {
 	kubernetes.Interface
 
 	Discovery discovery.DiscoveryInterface
-	Route     route.Interface
 
 	scheme *runtime.Scheme
 	config *rest.Config
@@ -52,20 +49,6 @@ func NewClient(cfg *rest.Config, scheme *runtime.Scheme, cc ctrl.Client) (*Clien
 		rest:      restClient,
 	}
 
-	io, err := IsOpenShift(discoveryClient)
-	if err != nil {
-		return nil, err
-	}
-
-	if io {
-		routeClient, err := route.NewForConfig(cfg)
-		if err != nil {
-			return nil, err
-		}
-
-		c.Route = routeClient
-	}
-
 	return &c, nil
 }
 
@@ -79,24 +62,4 @@ func NewRESTClientForConfig(config *rest.Config) (*rest.RESTClient, error) {
 	}
 
 	return rest.RESTClientFor(cfg)
-}
-
-// IsOpenShift returns true if we are connected to a OpenShift cluster.
-func (c *Client) IsOpenShift() (bool, error) {
-	if c.Discovery == nil {
-		return false, nil
-	}
-
-	return IsOpenShift(c.Discovery)
-}
-
-func IsOpenShift(d discovery.DiscoveryInterface) (bool, error) {
-	_, err := d.ServerResourcesForGroupVersion("route.openshift.io/v1")
-	if err != nil && k8serrors.IsNotFound(err) {
-		return false, nil
-	} else if err != nil {
-		return false, err
-	}
-
-	return true, nil
 }
