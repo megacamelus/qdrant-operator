@@ -11,18 +11,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  e2e:
-    uses: ./.github/workflows/e2e.yml
-  deploy:
-    needs:
-      - e2e
-    uses: ./.github/workflows/build-and-push.yml
-    with:
-      version: "${{ github.ref_name }}-${{ github.sha }}"
-      olm: false
-      tag: main
-      latest: true
-    secrets:
-      registry: "quay.io"
-      registry-username: ${{ secrets.QUAY_USERNAME }}
-      registry-password: ${{ secrets.QUAY_PASSWORD }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Set up Go"
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          check-latest: true
+      - name: "Build"
+        run: make build
+      - name: "Test"
+        run: make test

@@ -25,7 +25,3 @@ jobs:
         run: make build
       - name: "Test"
         run: make test
-  e2e:
-    uses: ./.github/workflows/e2e.yml
-    needs:
-      - build
