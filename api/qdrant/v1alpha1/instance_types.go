@@ -31,7 +31,8 @@ type InstanceStatus struct {
 	Phase              string             `json:"phase"`
 	Conditions         []metav1.Condition `json:"conditions,omitempty"`
 	ObservedGeneration int64              `json:"observedGeneration,omitempty"`
-	Endpoint           string             `json:"endpoint,omitempty"`
+	GrpcEndpoint       string             `json:"httpEndpoint,omitempty"`
+	HttpEndpoint       string             `json:"grpcEndpoint,omitempty"`
 }
 
 // +kubebuilder:object:root=true

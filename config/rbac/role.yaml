@@ -43,6 +43,32 @@ rules:
 - apiGroups:
   - qdrant.lburgazzoli.github.io
   resources:
+  - collections
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - qdrant.lburgazzoli.github.io
+  resources:
+  - collections/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - qdrant.lburgazzoli.github.io
+  resources:
+  - collections/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - qdrant.lburgazzoli.github.io
+  resources:
   - instances
   verbs:
   - create

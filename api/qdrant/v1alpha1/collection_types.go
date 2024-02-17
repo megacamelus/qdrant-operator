@@ -22,6 +22,20 @@ import (
 
 // CollectionSpec defines the desired state of Collection
 type CollectionSpec struct {
+	// +kubebuilder:validation:Required
+	Instance string `json:"instance"`
+
+	// +kubebuilder:validation:Required
+	VectorParams *VectorParams `json:"vectorParams,omitempty"`
+}
+
+type VectorParams struct {
+	// +kubebuilder:validation:Required
+	Size uint64 `json:"size"`
+
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:Enum:=Cosine;Euclid;Dot;Manhattan
+	Distance string `json:"distance"`
 }
 
 // CollectionStatus defines the observed state of Collection
@@ -29,7 +43,10 @@ type CollectionStatus struct {
 	Phase              string             `json:"phase"`
 	Conditions         []metav1.Condition `json:"conditions,omitempty"`
 	ObservedGeneration int64              `json:"observedGeneration,omitempty"`
-	Endpoint           string             `json:"endpoint,omitempty"`
+
+	Status       string `json:"status"`
+	VectorsCount string `json:"vectorsCount"`
+	PointsCount  string `json:"pointsCount"`
 }
 
 // +kubebuilder:object:root=true

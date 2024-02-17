@@ -114,7 +114,9 @@ spec:
                   - type
                   type: object
                 type: array
-              endpoint:
+              grpcEndpoint:
+                type: string
+              httpEndpoint:
                 type: string
               observedGeneration:
                 format: int64
