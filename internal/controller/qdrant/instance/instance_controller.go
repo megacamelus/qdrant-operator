@@ -121,7 +121,7 @@ func (r *InstanceReconciler) Reconcile(ctx context.Context, res *qdrantApi.Insta
 					return ctrl.Result{}, err
 				}
 
-				return ctrl.Result{}, errors.Wrapf(err, "failure adding finalizer to connector cluster %s", rr.String())
+				return ctrl.Result{}, errors.Wrapf(err, "failure adding finalizer to instance %s", rr.String())
 			}
 		}
 	} else {
@@ -146,7 +146,7 @@ func (r *InstanceReconciler) Reconcile(ctx context.Context, res *qdrantApi.Insta
 					return ctrl.Result{}, err
 				}
 
-				return ctrl.Result{}, errors.Wrapf(err, "failure removing finalizer from connector cluster %s", rr.String())
+				return ctrl.Result{}, errors.Wrapf(err, "failure removing finalizer from instance %s", rr.String())
 			}
 		}
 

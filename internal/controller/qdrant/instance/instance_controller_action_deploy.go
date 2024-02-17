@@ -101,6 +101,10 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 					WithSecurityContext(corev1ac.PodSecurityContext().
 						WithRunAsNonRoot(true).
 						WithSeccompProfile(corev1ac.SeccompProfile().WithType(corev1.SeccompProfileTypeRuntimeDefault))).
+					WithVolumes(corev1ac.Volume().
+						WithName(rr.Instance.Name + "-storage").
+						WithPersistentVolumeClaim(corev1ac.PersistentVolumeClaimVolumeSource().
+							WithClaimName(rr.Instance.Name))).
 					WithContainers(corev1ac.Container().
 						WithImage(image).
 						WithImagePullPolicy(corev1.PullAlways).
