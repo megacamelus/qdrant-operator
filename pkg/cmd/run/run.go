@@ -3,9 +3,10 @@ package run
 import (
 	"context"
 	"fmt"
+	"runtime"
+
 	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
 	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/collection"
-	"runtime"
 
 	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/instance"
 	"github.com/pkg/errors"
