@@ -22,7 +22,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Collection is the Schema for the collections API
+        description: Collection is the Schema for the collections API.
         properties:
           apiVersion:
             description: |-
@@ -42,7 +42,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: CollectionSpec defines the desired state of Collection
+            description: CollectionSpec defines the desired state of Collection.
             properties:
               cluster:
                 type: string
@@ -66,7 +66,7 @@ spec:
             - cluster
             type: object
           status:
-            description: CollectionStatus defines the observed state of Collection
+            description: CollectionStatus defines the observed state of Collection.
             properties:
               conditions:
                 items:
