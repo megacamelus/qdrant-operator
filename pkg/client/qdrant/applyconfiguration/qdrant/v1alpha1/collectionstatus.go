@@ -27,6 +27,7 @@ type CollectionStatusApplyConfiguration struct {
 	Phase              *string        `json:"phase,omitempty"`
 	Conditions         []v1.Condition `json:"conditions,omitempty"`
 	ObservedGeneration *int64         `json:"observedGeneration,omitempty"`
+	Name               *string        `json:"name,omitempty"`
 	Status             *string        `json:"status,omitempty"`
 	VectorsCount       *uint64        `json:"vectorsCount,omitempty"`
 	PointsCount        *uint64        `json:"pointsCount,omitempty"`
@@ -61,6 +62,14 @@ func (b *CollectionStatusApplyConfiguration) WithConditions(values ...v1.Conditi
 // If called multiple times, the ObservedGeneration field is set to the value of the last call.
 func (b *CollectionStatusApplyConfiguration) WithObservedGeneration(value int64) *CollectionStatusApplyConfiguration {
 	b.ObservedGeneration = &value
+	return b
+}
+
+// WithName sets the Name field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Name field is set to the value of the last call.
+func (b *CollectionStatusApplyConfiguration) WithName(value string) *CollectionStatusApplyConfiguration {
+	b.Name = &value
 	return b
 }
 
