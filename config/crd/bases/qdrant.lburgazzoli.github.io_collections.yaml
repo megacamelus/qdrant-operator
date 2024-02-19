@@ -46,6 +46,8 @@ spec:
             properties:
               cluster:
                 type: string
+              name:
+                type: string
               vectorParams:
                 properties:
                   distance:

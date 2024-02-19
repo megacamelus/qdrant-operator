@@ -74,8 +74,14 @@ func (a *applyAction) create(ctx context.Context, rr *ReconciliationRequest, cc 
 	default:
 		return fmt.Errorf("unsupported vector distance type: %s", rr.Collection.Spec.VectorParams.Distance)
 	}
+
+	name := rr.Collection.Spec.Name
+	if name == "" {
+		name = rr.Collection.Name
+	}
+
 	_, err := cc.Create(ctx, &pb.CreateCollection{
-		CollectionName: rr.Collection.Name,
+		CollectionName: name,
 		VectorsConfig: &pb.VectorsConfig{
 			Config: &pb.VectorsConfig_Params{
 				Params: &pb.VectorParams{

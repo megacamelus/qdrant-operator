@@ -25,6 +25,9 @@ type CollectionSpec struct {
 	// +kubebuilder:validation:Required
 	Cluster string `json:"cluster"`
 
+	// +kubebuilder:validation:Optional
+	Name string `json:"name,omitempty"`
+
 	// +kubebuilder:validation:Required
 	VectorParams *VectorParams `json:"vectorParams,omitempty"`
 }

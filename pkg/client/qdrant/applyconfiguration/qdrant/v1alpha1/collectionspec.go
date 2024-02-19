@@ -21,6 +21,7 @@ package v1alpha1
 // with apply.
 type CollectionSpecApplyConfiguration struct {
 	Cluster      *string                         `json:"cluster,omitempty"`
+	Name         *string                         `json:"name,omitempty"`
 	VectorParams *VectorParamsApplyConfiguration `json:"vectorParams,omitempty"`
 }
 
@@ -35,6 +36,14 @@ func CollectionSpec() *CollectionSpecApplyConfiguration {
 // If called multiple times, the Cluster field is set to the value of the last call.
 func (b *CollectionSpecApplyConfiguration) WithCluster(value string) *CollectionSpecApplyConfiguration {
 	b.Cluster = &value
+	return b
+}
+
+// WithName sets the Name field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Name field is set to the value of the last call.
+func (b *CollectionSpecApplyConfiguration) WithName(value string) *CollectionSpecApplyConfiguration {
+	b.Name = &value
 	return b
 }
 
