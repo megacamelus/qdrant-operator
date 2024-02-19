@@ -47,6 +47,7 @@ type CollectionStatus struct {
 	Conditions         []metav1.Condition `json:"conditions,omitempty"`
 	ObservedGeneration int64              `json:"observedGeneration,omitempty"`
 
+	Name         string `json:"name"`
 	Status       string `json:"status"`
 	VectorsCount uint64 `json:"vectorsCount"`
 	PointsCount  uint64 `json:"pointsCount"`

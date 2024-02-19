@@ -31,8 +31,13 @@ func (a *statusAction) Apply(ctx context.Context, rr *ReconciliationRequest) err
 }
 
 func (a *statusAction) info(ctx context.Context, rr *ReconciliationRequest, cc pb.CollectionsClient) error {
+	name := rr.Collection.Spec.Name
+	if name == "" {
+		name = rr.Collection.Name
+	}
+
 	r, err := cc.Get(ctx, &pb.GetCollectionInfoRequest{
-		CollectionName: rr.Collection.Name,
+		CollectionName: name,
 	})
 
 	if err != nil {
@@ -68,6 +73,8 @@ func (a *statusAction) info(ctx context.Context, rr *ReconciliationRequest, cc p
 		rr.Collection.Status.PointsCount = r.GetResult().GetPointsCount()
 		rr.Collection.Status.VectorsCount = r.GetResult().GetVectorsCount()
 	}
+
+	rr.Collection.Status.Name = name
 
 	return nil
 }
