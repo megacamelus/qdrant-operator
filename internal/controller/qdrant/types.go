@@ -24,11 +24,11 @@ import (
 const (
 	QdrantAppName              string = "qdrant"
 	QdrantOperatorFieldManager string = "qdrant-operator"
-	QdrantHttpPort             int32  = 6333
-	QdrantHttpPortType         string = "http"
+	QdrantHTTPPort             int32  = 6333
+	QdrantHTTPPortType         string = "http"
 	QdrantGrpcPort             int32  = 6334
 	QdrantGrpcPortType         string = "grpc"
-	QdrantLivenessProbePath    string = "/readyz"
+	QdrantLivenessProbePath    string = "/livez"
 	QdrantReadinessProbePath   string = "/readyz"
 
 	KubernetesLabelAppName      = "app.kubernetes.io/name"

@@ -20,10 +20,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// CollectionSpec defines the desired state of Collection
+// CollectionSpec defines the desired state of Collection.
 type CollectionSpec struct {
 	// +kubebuilder:validation:Required
-	Instance string `json:"instance"`
+	Cluster string `json:"cluster"`
 
 	// +kubebuilder:validation:Required
 	VectorParams *VectorParams `json:"vectorParams,omitempty"`
@@ -38,21 +38,24 @@ type VectorParams struct {
 	Distance string `json:"distance"`
 }
 
-// CollectionStatus defines the observed state of Collection
+// CollectionStatus defines the observed state of Collection.
 type CollectionStatus struct {
 	Phase              string             `json:"phase"`
 	Conditions         []metav1.Condition `json:"conditions,omitempty"`
 	ObservedGeneration int64              `json:"observedGeneration,omitempty"`
 
 	Status       string `json:"status"`
-	VectorsCount string `json:"vectorsCount"`
-	PointsCount  string `json:"pointsCount"`
+	VectorsCount uint64 `json:"vectorsCount"`
+	PointsCount  uint64 `json:"pointsCount"`
 }
 
+// +genclient
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:storageversion
+// +kubebuilder:printcolumn:name="Cluster",type=string,JSONPath=`.spec.cluster`,description="The Cluster"
 
-// Collection is the Schema for the collections API
+// Collection is the Schema for the collections API.
 type Collection struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -63,7 +66,7 @@ type Collection struct {
 
 // +kubebuilder:object:root=true
 
-// CollectionList contains a list of Collection
+// CollectionList contains a list of Collection.
 type CollectionList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`

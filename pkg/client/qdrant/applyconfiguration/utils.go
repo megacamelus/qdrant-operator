@@ -18,6 +18,8 @@ limitations under the License.
 package applyconfiguration
 
 import (
+	v1alpha1 "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 )
 
@@ -25,6 +27,22 @@ import (
 // apply configuration type exists for the given GroupVersionKind.
 func ForKind(kind schema.GroupVersionKind) interface{} {
 	switch kind {
+	// Group=qdrant, Version=v1alpha1
+	case v1alpha1.SchemeGroupVersion.WithKind("Cluster"):
+		return &qdrantv1alpha1.ClusterApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("ClusterSpec"):
+		return &qdrantv1alpha1.ClusterSpecApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("ClusterStatus"):
+		return &qdrantv1alpha1.ClusterStatusApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("Collection"):
+		return &qdrantv1alpha1.CollectionApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("CollectionSpec"):
+		return &qdrantv1alpha1.CollectionSpecApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("CollectionStatus"):
+		return &qdrantv1alpha1.CollectionStatusApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("VectorParams"):
+		return &qdrantv1alpha1.VectorParamsApplyConfiguration{}
+
 	}
 	return nil
 }

@@ -2,7 +2,7 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
-- bases/qdrant.lburgazzoli.github.io_instances.yaml
+- bases/qdrant.lburgazzoli.github.io_clusters.yaml
 - bases/qdrant.lburgazzoli.github.io_collections.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
 

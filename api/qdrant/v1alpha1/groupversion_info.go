@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Package v1alph1 contains API Schema definitions for the qdrant v1alph1 API group
+// Package v1alph1 contains API Schema definitions for the qdrant v1alpha1 API group
 // +kubebuilder:object:generate=true
 // +groupName=qdrant.lburgazzoli.github.io
 package v1alpha1
@@ -25,13 +25,13 @@ import (
 )
 
 var (
-	// GroupVersion is group version used to register these objects
-	GroupVersion = schema.GroupVersion{Group: "qdrant.lburgazzoli.github.io", Version: "v1alph1"}
+	// GroupVersion is group version used to register these objects.
+	GroupVersion = schema.GroupVersion{Group: "qdrant.lburgazzoli.github.io", Version: "v1alpha1"}
 
 	// SchemeGroupVersion is an hack for client gen.
 	SchemeGroupVersion = GroupVersion
 
-	// SchemeBuilder is used to add go types to the GroupVersionKind scheme
+	// SchemeBuilder is used to add go types to the GroupVersionKind scheme.
 	SchemeBuilder = &scheme.Builder{GroupVersion: GroupVersion}
 
 	// AddToScheme adds the types in this group-version to the given scheme.
@@ -39,7 +39,7 @@ var (
 )
 
 func init() {
-	SchemeBuilder.Register(&Instance{}, &InstanceList{})
+	SchemeBuilder.Register(&Cluster{}, &ClusterList{})
 	SchemeBuilder.Register(&Collection{}, &CollectionList{})
 }
 

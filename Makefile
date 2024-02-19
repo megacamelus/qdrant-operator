@@ -103,8 +103,13 @@ manifests: codegen-tools-install ## Generate WebhookConfiguration, ClusterRole a
 	$(PROJECT_PATH)/hack/scripts/gen_crd.sh $(PROJECT_PATH)
 
 .PHONY: generate
-generate: codegen-tools-install ## Generate code containing DeepCopy, DeepCopyInto, and DeepCopyObject method implementations.
+generate: generate/resources generate/client
+
+.PHONY: generate/resources
+generate/resources: codegen-tools-install
 	$(PROJECT_PATH)/hack/scripts/gen_res.sh $(PROJECT_PATH)
+.PHONY: generate/client
+generate/client: codegen-tools-install
 	$(PROJECT_PATH)/hack/scripts/gen_client.sh $(PROJECT_PATH)
 
 .PHONY: fmt

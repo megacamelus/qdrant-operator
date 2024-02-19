@@ -18,7 +18,7 @@ resources:
   controller: true
   domain: lburgazzoli.github.io
   group: qdrant
-  kind: Instance
+  kind: Cluster
   path: github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1
   version: v1alpha1
 - api:

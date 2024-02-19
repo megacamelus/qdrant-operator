@@ -1,7 +1,5 @@
 ## Append samples you want in your CSV to this file as resources ##
 resources:
-- designer_demo.yaml
-- qdrant_v1alph1_instance.yaml
-- qdrant_v1alph1_collection.yaml
-- qdrant_v1alpha1_collection.yaml
+- cluster.yaml
+- collection.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

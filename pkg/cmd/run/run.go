@@ -6,10 +6,11 @@ import (
 	"runtime"
 
 	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
+	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/cluster"
 	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/collection"
 
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/instance"
-	"github.com/pkg/errors"
+	qdrantApi "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
+
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -20,8 +21,6 @@ import (
 	"github.com/lburgazzoli/qdrant-operator/pkg/defaults"
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-
-	qdrantApi "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
 
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -47,7 +46,7 @@ func NewRunCmd() *cobra.Command {
 		Short: "run",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return controller.Start(options, func(manager manager.Manager, opts controller.Options) error {
-				return start(cmd.Context(), manager, opts)
+				return run(cmd.Context(), manager, opts)
 			})
 		},
 	}
@@ -64,7 +63,7 @@ func NewRunCmd() *cobra.Command {
 	return &cmd
 }
 
-func start(ctx context.Context, manager manager.Manager, opts controller.Options) error {
+func run(ctx context.Context, manager manager.Manager, opts controller.Options) error {
 	l := ctrl.Log.WithName("run")
 	l.Info(fmt.Sprintf("Go Version: %s", runtime.Version()))
 	l.Info(fmt.Sprintf("Go OS/Arch: %s/%s", runtime.GOOS, runtime.GOARCH))
@@ -72,7 +71,7 @@ func start(ctx context.Context, manager manager.Manager, opts controller.Options
 
 	selector, err := qdrant.AppSelector()
 	if err != nil {
-		return errors.Wrap(err, "unable to compute cache's watch selector")
+		return fmt.Errorf("unable to compute cache's watch selector %w", err)
 	}
 
 	opts.WatchSelectors = map[rtclient.Object]rtcache.ByObject{
@@ -82,22 +81,12 @@ func start(ctx context.Context, manager manager.Manager, opts controller.Options
 		&corev1.ServiceAccount{}:     {Label: selector},
 	}
 
-	irec, err := instance.NewInstanceReconciler(manager)
-	if err != nil {
+	if err := cluster.Setup(ctx, manager); err != nil {
 		return err
 	}
 
-	if err := irec.SetupWithManager(ctx, manager); err != nil {
-		return errors.Wrap(err, "unable to setup Instance reconciler")
-	}
-
-	crec, err := collection.NewCollectionReconciler(manager)
-	if err != nil {
+	if err := collection.Setup(ctx, manager); err != nil {
 		return err
-	}
-
-	if err := crec.SetupWithManager(ctx, manager); err != nil {
-		return errors.Wrap(err, "unable to setup Collection reconciler")
 	}
 
 	return nil

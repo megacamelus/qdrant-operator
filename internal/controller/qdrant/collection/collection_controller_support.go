@@ -17,41 +17,63 @@ limitations under the License.
 package collection
 
 import (
-	"strings"
+	"context"
+	"errors"
+	"fmt"
+	"time"
 
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
-
-	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/apimachinery/pkg/selection"
-
-	ctrl "sigs.k8s.io/controller-runtime/pkg/client"
+	pb "github.com/qdrant/go-client/qdrant"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func Labels(ref ctrl.Object) map[string]string {
-	return map[string]string{
-		qdrant.KubernetesLabelAppName:      AppName,
-		qdrant.KubernetesLabelAppInstance:  AppName + "-" + strings.ToLower(ref.GetName()),
-		qdrant.KubernetesLabelAppComponent: strings.ToLower(ref.GetObjectKind().GroupVersionKind().Kind),
-		qdrant.KubernetesLabelAppPartOf:    qdrant.QdrantAppName,
-		qdrant.KubernetesLabelAppManagedBy: qdrant.QdrantOperatorFieldManager,
-	}
-}
+func endpoint(ctx context.Context, rr *ReconciliationRequest) (string, error) {
+	c, err := rr.Client.Qdrant.QdrantV1alpha1().Clusters(rr.Collection.Namespace).Get(
+		ctx,
+		rr.Collection.Spec.Cluster,
+		metav1.GetOptions{},
+	)
 
-func LabelsForSelector(ref ctrl.Object) map[string]string {
-	return map[string]string{
-		qdrant.KubernetesLabelAppName:     AppName,
-		qdrant.KubernetesLabelAppInstance: AppName + "-" + strings.ToLower(ref.GetName()),
+	if k8serrors.IsNotFound(err) {
+		return "", nil
 	}
-}
-
-func AppSelector() (labels.Selector, error) {
-	appName, err := labels.NewRequirement(qdrant.KubernetesLabelAppName, selection.Equals, []string{AppName})
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	selector := labels.NewSelector().
-		Add(*appName)
+	if c.Status.GrpcEndpoint == "" {
+		return "", errors.New("unable to determine Grpc endpoint")
+	}
 
-	return selector, nil
+	return c.Status.GrpcEndpoint, nil
+}
+
+func WithCollectionsClient(ctx context.Context, rr *ReconciliationRequest, f func(context.Context, *ReconciliationRequest, pb.CollectionsClient) error) error {
+	endpoint, err := endpoint(ctx, rr)
+	if err != nil {
+		return fmt.Errorf("unable to determine Grpc endpoint for qdrant cluster %s, %w", rr.Collection.Spec.Cluster, err)
+	}
+
+	newCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	conn, err := grpc.DialContext(
+		newCtx,
+		endpoint,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+
+	if err != nil {
+		return fmt.Errorf("unable to connect to %s, %w", endpoint, err)
+	}
+
+	defer func() {
+		_ = conn.Close()
+	}()
+
+	cc := pb.NewCollectionsClient(conn)
+
+	return f(newCtx, rr, cc)
 }

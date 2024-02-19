@@ -18,11 +18,11 @@ package collection
 
 import (
 	"context"
+	"fmt"
 	"sort"
 
 	"github.com/go-logr/logr"
 	"github.com/lburgazzoli/qdrant-operator/pkg/defaults"
-	"github.com/pkg/errors"
 	"go.uber.org/multierr"
 
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -43,27 +43,39 @@ import (
 	qdrantApi "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
 )
 
-func NewCollectionReconciler(manager ctrl.Manager) (*CollectionReconciler, error) {
+func NewCollectionReconciler(manager ctrl.Manager) (*Reconciler, error) {
 	c, err := client.NewClient(manager.GetConfig(), manager.GetScheme(), manager.GetClient())
 	if err != nil {
 		return nil, err
 	}
 
-	rec := CollectionReconciler{}
-	rec.l = ctrl.Log.WithName("instance")
+	rec := Reconciler{}
+	rec.l = ctrl.Log.WithName("cluster")
 	rec.Client = c
 	rec.Scheme = manager.GetScheme()
 
 	rec.actions = make([]Action, 0)
-	// rec.actions = append(rec.actions, NewServiceAction())
-	// rec.actions = append(rec.actions, NewPersistentVolumeClaimAction())
-	// rec.actions = append(rec.actions, NewDeployAction())
+	rec.actions = append(rec.actions, NewApplyAction())
+	rec.actions = append(rec.actions, NewStatusAction())
 
 	return &rec, nil
 }
 
-// CollectionReconciler reconciles a Instance object
-type CollectionReconciler struct {
+func Setup(ctx context.Context, mgr ctrl.Manager) error {
+	rec, err := NewCollectionReconciler(mgr)
+	if err != nil {
+		return fmt.Errorf("unable to create Collection reconciler %w", err)
+	}
+
+	if err := rec.SetupWithManager(ctx, mgr); err != nil {
+		return fmt.Errorf("unable to setup Collection reconciler %w", err)
+	}
+
+	return nil
+}
+
+// Reconciler reconciles a Cluster object.
+type Reconciler struct {
 	*client.Client
 
 	Scheme  *runtime.Scheme
@@ -74,11 +86,11 @@ type CollectionReconciler struct {
 // +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=collections,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=collections/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=collections/finalizers,verbs=update
-// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=instances,verbs=get;list;watch
-// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=instances/status,verbs=get
+// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=clusters,verbs=get;list;watch
+// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=clusters/status,verbs=get
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *CollectionReconciler) SetupWithManager(ctx context.Context, mgr ctrl.Manager) error {
+func (r *Reconciler) SetupWithManager(ctx context.Context, mgr ctrl.Manager) error {
 	c := ctrl.NewControllerManagedBy(mgr)
 
 	c = c.For(&qdrantApi.Collection{}, builder.WithPredicates(
@@ -98,7 +110,7 @@ func (r *CollectionReconciler) SetupWithManager(ctx context.Context, mgr ctrl.Ma
 	return c.Complete(reconcile.AsReconciler[*qdrantApi.Collection](mgr.GetClient(), r))
 }
 
-func (r *CollectionReconciler) Reconcile(ctx context.Context, res *qdrantApi.Collection) (ctrl.Result, error) {
+func (r *Reconciler) Reconcile(ctx context.Context, res *qdrantApi.Collection) (ctrl.Result, error) {
 	l := log.FromContext(ctx)
 
 	rr := ReconciliationRequest{
@@ -120,7 +132,7 @@ func (r *CollectionReconciler) Reconcile(ctx context.Context, res *qdrantApi.Col
 					return ctrl.Result{}, err
 				}
 
-				return ctrl.Result{}, errors.Wrapf(err, "failure adding finalizer to collection %s", rr.String())
+				return ctrl.Result{}, fmt.Errorf("failure adding finalizer to cluster %s %w", rr.String(), err)
 			}
 		}
 	} else {
@@ -145,7 +157,7 @@ func (r *CollectionReconciler) Reconcile(ctx context.Context, res *qdrantApi.Col
 					return ctrl.Result{}, err
 				}
 
-				return ctrl.Result{}, errors.Wrapf(err, "failure removing finalizer from collection %s", rr.String())
+				return ctrl.Result{}, fmt.Errorf("failure removing finalizer to cluster %s %w", rr.String(), err)
 			}
 		}
 

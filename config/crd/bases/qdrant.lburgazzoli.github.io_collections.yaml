@@ -14,7 +14,12 @@ spec:
     singular: collection
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - description: The Cluster
+      jsonPath: .spec.cluster
+      name: Cluster
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: Collection is the Schema for the collections API
@@ -39,7 +44,7 @@ spec:
           spec:
             description: CollectionSpec defines the desired state of Collection
             properties:
-              instance:
+              cluster:
                 type: string
               vectorParams:
                 properties:
@@ -58,7 +63,7 @@ spec:
                 - size
                 type: object
             required:
-            - instance
+            - cluster
             type: object
           status:
             description: CollectionStatus defines the observed state of Collection
@@ -138,11 +143,13 @@ spec:
               phase:
                 type: string
               pointsCount:
-                type: string
+                format: int64
+                type: integer
               status:
                 type: string
               vectorsCount:
-                type: string
+                format: int64
+                type: integer
             required:
             - phase
             - pointsCount

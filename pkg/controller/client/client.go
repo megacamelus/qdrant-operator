@@ -9,6 +9,8 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/scale"
 	ctrl "sigs.k8s.io/controller-runtime/pkg/client"
+
+	qdrantClient "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/clientset/versioned"
 )
 
 var scaleConverter = scale.NewScaleConverter()
@@ -17,6 +19,8 @@ var codecs = serializer.NewCodecFactory(scaleConverter.Scheme())
 type Client struct {
 	ctrl.Client
 	kubernetes.Interface
+
+	Qdrant qdrantClient.Interface
 
 	Discovery discovery.DiscoveryInterface
 
@@ -39,10 +43,15 @@ func NewClient(cfg *rest.Config, scheme *runtime.Scheme, cc ctrl.Client) (*Clien
 	if err != nil {
 		return nil, err
 	}
+	qClient, err := qdrantClient.NewForConfig(cfg)
+	if err != nil {
+		return nil, err
+	}
 
 	c := Client{
 		Client:    cc,
 		Interface: kubeClient,
+		Qdrant:    qClient,
 		Discovery: discoveryClient,
 		scheme:    scheme,
 		config:    cfg,
