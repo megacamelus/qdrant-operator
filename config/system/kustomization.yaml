@@ -1,0 +1,4 @@
+resources:
+- ../standalone
+
+namespace: qdrant-system

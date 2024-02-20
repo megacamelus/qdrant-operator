@@ -9,7 +9,6 @@ metadata:
     app.kubernetes.io/part-of: qdrant-operator
     app.kubernetes.io/managed-by: kustomize
   name: qdrant-operator-leader-election
-  namespace: qdrant-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -17,4 +16,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: qdrant-operator
-  namespace: qdrant-system
+  namespace: default
