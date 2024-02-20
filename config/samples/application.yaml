@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: camel-qdrant
+spec:
+  destination:
+    namespace: 'camel-ai'
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: config/standalone
+    repoURL: 'https://github.com/lburgazzoli/qdrant-operator'
+    targetRevision: HEAD
+    kustomize:
+      namespace: 'camel-ai'
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+       CreateNamespace=true
