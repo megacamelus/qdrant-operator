@@ -46,7 +46,10 @@ type CollectionStatus struct {
 	Phase              string             `json:"phase"`
 	Conditions         []metav1.Condition `json:"conditions,omitempty"`
 	ObservedGeneration int64              `json:"observedGeneration,omitempty"`
+	CollectionInfo     *CollectionInfo    `json:"collection,omitempty"`
+}
 
+type CollectionInfo struct {
 	Name         string `json:"name"`
 	Status       string `json:"status"`
 	VectorsCount uint64 `json:"vectorsCount"`
@@ -58,6 +61,8 @@ type CollectionStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 // +kubebuilder:printcolumn:name="Cluster",type=string,JSONPath=`.spec.cluster`,description="The Cluster"
+// +kubebuilder:printcolumn:name="Collection Name",type=string,JSONPath=`.status.collection.name`,description="The Collection Name"
+// +kubebuilder:printcolumn:name="Collection Status",type=string,JSONPath=`.status.collection.status`,description="The Collection Status"
 
 // Collection is the Schema for the collections API.
 type Collection struct {

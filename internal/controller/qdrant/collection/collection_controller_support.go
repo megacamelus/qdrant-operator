@@ -51,9 +51,12 @@ func endpoint(ctx context.Context, rr *ReconciliationRequest) (string, error) {
 }
 
 func WithCollectionsClient(ctx context.Context, rr *ReconciliationRequest, f func(context.Context, *ReconciliationRequest, pb.CollectionsClient) error) error {
-	endpoint, err := endpoint(ctx, rr)
+	endpointURL, err := endpoint(ctx, rr)
 	if err != nil {
 		return fmt.Errorf("unable to determine Grpc endpoint for qdrant cluster %s, %w", rr.Collection.Spec.Cluster, err)
+	}
+	if endpointURL == "" {
+		return fmt.Errorf("unable to determine Grpc endpoint for qdrant cluster %s", rr.Collection.Spec.Cluster)
 	}
 
 	newCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
@@ -61,12 +64,12 @@ func WithCollectionsClient(ctx context.Context, rr *ReconciliationRequest, f fun
 
 	conn, err := grpc.DialContext(
 		newCtx,
-		endpoint,
+		endpointURL,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 
 	if err != nil {
-		return fmt.Errorf("unable to connect to %s, %w", endpoint, err)
+		return fmt.Errorf("unable to connect to %s, %w", endpointURL, err)
 	}
 
 	defer func() {

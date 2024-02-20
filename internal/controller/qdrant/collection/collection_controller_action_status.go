@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	qdrantApi "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
+
 	"github.com/lburgazzoli/qdrant-operator/pkg/controller/client"
 	pb "github.com/qdrant/go-client/qdrant"
 	"google.golang.org/grpc/codes"
@@ -58,23 +60,25 @@ func (a *statusAction) info(ctx context.Context, rr *ReconciliationRequest, cc p
 		}
 	}
 
+	rr.Collection.Status.CollectionInfo = &qdrantApi.CollectionInfo{
+		Name: name,
+	}
+
 	if r.GetResult() != nil {
 		switch r.GetResult().GetStatus() {
 		case pb.CollectionStatus_Green:
-			rr.Collection.Status.Status = "Green"
+			rr.Collection.Status.CollectionInfo.Status = "Green"
 		case pb.CollectionStatus_Yellow:
-			rr.Collection.Status.Status = "Yellow"
+			rr.Collection.Status.CollectionInfo.Status = "Yellow"
 		case pb.CollectionStatus_Red:
-			rr.Collection.Status.Status = "Red"
+			rr.Collection.Status.CollectionInfo.Status = "Red"
 		default:
-			rr.Collection.Status.Status = "Unknown"
+			rr.Collection.Status.CollectionInfo.Status = "Unknown"
 		}
 
-		rr.Collection.Status.PointsCount = r.GetResult().GetPointsCount()
-		rr.Collection.Status.VectorsCount = r.GetResult().GetVectorsCount()
+		rr.Collection.Status.CollectionInfo.PointsCount = r.GetResult().GetPointsCount()
+		rr.Collection.Status.CollectionInfo.VectorsCount = r.GetResult().GetVectorsCount()
 	}
-
-	rr.Collection.Status.Name = name
 
 	return nil
 }

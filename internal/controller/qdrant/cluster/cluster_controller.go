@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"time"
 
 	"github.com/go-logr/logr"
 	"github.com/lburgazzoli/qdrant-operator/pkg/defaults"
@@ -146,7 +147,8 @@ func (r *Reconciler) Reconcile(ctx context.Context, res *qdrantApi.Cluster) (ctr
 
 		for i := len(r.actions) - 1; i >= 0; i-- {
 			if err := r.actions[i].Cleanup(ctx, &rr); err != nil {
-				return ctrl.Result{}, err
+				l.Info("Failure while performing cleanup, retrying in 5 sec")
+				return ctrl.Result{RequeueAfter: 1 * time.Second}, err
 			}
 		}
 

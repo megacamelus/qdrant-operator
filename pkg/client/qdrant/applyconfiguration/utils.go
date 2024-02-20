@@ -36,6 +36,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &qdrantv1alpha1.ClusterStatusApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("Collection"):
 		return &qdrantv1alpha1.CollectionApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("CollectionInfo"):
+		return &qdrantv1alpha1.CollectionInfoApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("CollectionSpec"):
 		return &qdrantv1alpha1.CollectionSpecApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("CollectionStatus"):

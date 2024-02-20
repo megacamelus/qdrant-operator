@@ -19,6 +19,14 @@ spec:
       jsonPath: .spec.cluster
       name: Cluster
       type: string
+    - description: The Collection Name
+      jsonPath: .status.collection.name
+      name: Collection Name
+      type: string
+    - description: The Collection Status
+      jsonPath: .status.collection.status
+      name: Collection Status
+      type: string
     name: v1alpha1
     schema:
       openAPIV3Schema:
@@ -70,6 +78,24 @@ spec:
           status:
             description: CollectionStatus defines the observed state of Collection.
             properties:
+              collection:
+                properties:
+                  name:
+                    type: string
+                  pointsCount:
+                    format: int64
+                    type: integer
+                  status:
+                    type: string
+                  vectorsCount:
+                    format: int64
+                    type: integer
+                required:
+                - name
+                - pointsCount
+                - status
+                - vectorsCount
+                type: object
               conditions:
                 items:
                   description: "Condition contains details for one aspect of the current
@@ -139,27 +165,13 @@ spec:
                   - type
                   type: object
                 type: array
-              name:
-                type: string
               observedGeneration:
                 format: int64
                 type: integer
               phase:
                 type: string
-              pointsCount:
-                format: int64
-                type: integer
-              status:
-                type: string
-              vectorsCount:
-                format: int64
-                type: integer
             required:
-            - name
             - phase
-            - pointsCount
-            - status
-            - vectorsCount
             type: object
         type: object
     served: true

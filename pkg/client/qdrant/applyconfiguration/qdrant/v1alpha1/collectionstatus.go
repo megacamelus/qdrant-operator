@@ -24,13 +24,10 @@ import (
 // CollectionStatusApplyConfiguration represents an declarative configuration of the CollectionStatus type for use
 // with apply.
 type CollectionStatusApplyConfiguration struct {
-	Phase              *string        `json:"phase,omitempty"`
-	Conditions         []v1.Condition `json:"conditions,omitempty"`
-	ObservedGeneration *int64         `json:"observedGeneration,omitempty"`
-	Name               *string        `json:"name,omitempty"`
-	Status             *string        `json:"status,omitempty"`
-	VectorsCount       *uint64        `json:"vectorsCount,omitempty"`
-	PointsCount        *uint64        `json:"pointsCount,omitempty"`
+	Phase              *string                           `json:"phase,omitempty"`
+	Conditions         []v1.Condition                    `json:"conditions,omitempty"`
+	ObservedGeneration *int64                            `json:"observedGeneration,omitempty"`
+	CollectionInfo     *CollectionInfoApplyConfiguration `json:"collection,omitempty"`
 }
 
 // CollectionStatusApplyConfiguration constructs an declarative configuration of the CollectionStatus type for use with
@@ -65,34 +62,10 @@ func (b *CollectionStatusApplyConfiguration) WithObservedGeneration(value int64)
 	return b
 }
 
-// WithName sets the Name field in the declarative configuration to the given value
+// WithCollectionInfo sets the CollectionInfo field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Name field is set to the value of the last call.
-func (b *CollectionStatusApplyConfiguration) WithName(value string) *CollectionStatusApplyConfiguration {
-	b.Name = &value
-	return b
-}
-
-// WithStatus sets the Status field in the declarative configuration to the given value
-// and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Status field is set to the value of the last call.
-func (b *CollectionStatusApplyConfiguration) WithStatus(value string) *CollectionStatusApplyConfiguration {
-	b.Status = &value
-	return b
-}
-
-// WithVectorsCount sets the VectorsCount field in the declarative configuration to the given value
-// and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the VectorsCount field is set to the value of the last call.
-func (b *CollectionStatusApplyConfiguration) WithVectorsCount(value uint64) *CollectionStatusApplyConfiguration {
-	b.VectorsCount = &value
-	return b
-}
-
-// WithPointsCount sets the PointsCount field in the declarative configuration to the given value
-// and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the PointsCount field is set to the value of the last call.
-func (b *CollectionStatusApplyConfiguration) WithPointsCount(value uint64) *CollectionStatusApplyConfiguration {
-	b.PointsCount = &value
+// If called multiple times, the CollectionInfo field is set to the value of the last call.
+func (b *CollectionStatusApplyConfiguration) WithCollectionInfo(value *CollectionInfoApplyConfiguration) *CollectionStatusApplyConfiguration {
+	b.CollectionInfo = value
 	return b
 }

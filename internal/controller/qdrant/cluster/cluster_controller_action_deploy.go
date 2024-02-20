@@ -2,6 +2,7 @@ package cluster
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
 	"github.com/lburgazzoli/qdrant-operator/pkg/apply"
@@ -37,7 +38,34 @@ func (a *deployAction) Configure(_ context.Context, _ *client.Client, b *builder
 	return b, nil
 }
 
-func (a *deployAction) Cleanup(context.Context, *ReconciliationRequest) error {
+func (a *deployAction) Cleanup(ctx context.Context, rr *ReconciliationRequest) error {
+	collections, err := rr.Client.Qdrant.QdrantV1alpha1().Collections(rr.Cluster.Namespace).List(ctx, metav1.ListOptions{})
+	if err != nil {
+		return err
+	}
+
+	if len(collections.Items) == 0 {
+		return nil
+	}
+
+	refs := make([]string, 0)
+
+	for i := range collections.Items {
+		if collections.Items[i].Spec.Cluster != rr.Cluster.Name {
+			continue
+		}
+
+		refs = append(refs, collections.Items[i].Name)
+	}
+
+	if len(collections.Items) > 0 {
+		return fmt.Errorf("cannot delete cluster with name %s, in namespace %s as it is referenced by %d collections (%s)",
+			rr.Cluster.Name,
+			rr.Cluster.Namespace,
+			len(collections.Items),
+			refs)
+	}
+
 	return nil
 }
 
