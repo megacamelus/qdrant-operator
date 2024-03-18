@@ -45,12 +45,6 @@ jobs:
 
       - name: "Build"
         run: |
-          cd ${{ env.PROJECTS }}/qdrant-operator 
-          make build
-          make test
-
-      - name: "Build"
-        run: |
           cd ${{ env.PROJECTS }}/qdrant-operator   
           make build
           make test
