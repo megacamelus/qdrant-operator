@@ -3,9 +3,9 @@ package cluster
 import (
 	"context"
 
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
-	"github.com/lburgazzoli/qdrant-operator/pkg/apply"
-	"github.com/lburgazzoli/qdrant-operator/pkg/controller/client"
+	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
+	"github.com/megacamelus/qdrant-operator/pkg/apply"
+	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

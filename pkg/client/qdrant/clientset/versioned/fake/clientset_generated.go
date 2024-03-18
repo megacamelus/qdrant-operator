@@ -18,9 +18,9 @@ limitations under the License.
 package fake
 
 import (
-	clientset "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/clientset/versioned"
-	qdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/clientset/versioned/typed/qdrant/v1alpha1"
-	fakeqdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/clientset/versioned/typed/qdrant/v1alpha1/fake"
+	clientset "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned"
+	qdrantv1alpha1 "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned/typed/qdrant/v1alpha1"
+	fakeqdrantv1alpha1 "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned/typed/qdrant/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

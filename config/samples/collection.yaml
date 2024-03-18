@@ -1,4 +1,4 @@
-apiVersion: qdrant.lburgazzoli.github.io/v1alpha1
+apiVersion: qdrant.megacamelus.github.io/v1alpha1
 kind: Collection
 metadata:
   labels:

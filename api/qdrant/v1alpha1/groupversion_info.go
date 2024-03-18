@@ -16,7 +16,7 @@ limitations under the License.
 
 // Package v1alph1 contains API Schema definitions for the qdrant v1alpha1 API group
 // +kubebuilder:object:generate=true
-// +groupName=qdrant.lburgazzoli.github.io
+// +groupName=qdrant.megacamelus.github.io
 package v1alpha1
 
 import (
@@ -26,7 +26,7 @@ import (
 )
 
 const (
-	QdrantGroup   = "qdrant.lburgazzoli.github.io"
+	QdrantGroup   = "qdrant.megacamelus.github.io"
 	QdrantVersion = "v1alpha1"
 )
 

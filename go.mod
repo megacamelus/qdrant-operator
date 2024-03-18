@@ -1,4 +1,4 @@
-module github.com/lburgazzoli/qdrant-operator
+module github.com/megacamelus/qdrant-operator
 
 go 1.22
 

@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	qdrantApi "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantApi "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
 
-	"github.com/lburgazzoli/qdrant-operator/pkg/controller/client"
+	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
 	pb "github.com/qdrant/go-client/qdrant"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

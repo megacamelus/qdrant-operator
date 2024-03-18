@@ -20,8 +20,8 @@ package v1alpha1
 import (
 	"net/http"
 
-	v1alpha1 "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
-	"github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/clientset/versioned/scheme"
+	v1alpha1 "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
+	"github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

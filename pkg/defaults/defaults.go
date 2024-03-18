@@ -6,7 +6,7 @@ const (
 	SyncInterval       = 5 * time.Second
 	RetryInterval      = 10 * time.Second
 	ConflictInterval   = 1 * time.Second
-	KaotoFinalizerName = "qdrant.lburgazzoli.github.io/finalizer"
+	KaotoFinalizerName = "qdrant.megacamelus.github.io/finalizer"
 )
 
 var (

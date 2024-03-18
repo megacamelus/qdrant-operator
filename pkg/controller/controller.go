@@ -8,7 +8,7 @@ import (
 
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 
-	"github.com/lburgazzoli/qdrant-operator/pkg/logger"
+	"github.com/megacamelus/qdrant-operator/pkg/logger"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)

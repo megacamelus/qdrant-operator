@@ -23,8 +23,8 @@ import (
 	"github.com/spf13/cobra"
 	"k8s.io/klog/v2"
 
-	"github.com/lburgazzoli/qdrant-operator/pkg/cmd/run"
-	"github.com/lburgazzoli/qdrant-operator/pkg/logger"
+	"github.com/megacamelus/qdrant-operator/pkg/cmd/run"
+	"github.com/megacamelus/qdrant-operator/pkg/logger"
 )
 
 func main() {

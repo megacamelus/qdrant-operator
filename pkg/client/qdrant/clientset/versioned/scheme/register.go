@@ -18,7 +18,7 @@ limitations under the License.
 package scheme
 
 import (
-	qdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantv1alpha1 "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

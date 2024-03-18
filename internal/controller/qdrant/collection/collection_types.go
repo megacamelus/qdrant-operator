@@ -20,13 +20,13 @@ import (
 	"context"
 	"fmt"
 
-	qdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantv1alpha1 "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/types"
 
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 
-	"github.com/lburgazzoli/qdrant-operator/pkg/controller/client"
+	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
 )
 
 const (

@@ -10,7 +10,7 @@ import (
 	"k8s.io/client-go/scale"
 	ctrl "sigs.k8s.io/controller-runtime/pkg/client"
 
-	qdrantClient "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/clientset/versioned"
+	qdrantClient "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned"
 )
 
 var scaleConverter = scale.NewScaleConverter()

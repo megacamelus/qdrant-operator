@@ -12,7 +12,7 @@ metadata:
   name: clusters-editor-role
 rules:
 - apiGroups:
-  - qdrant.lburgazzoli.github.io
+  - qdrant.megacamelus.github.io
   resources:
   - clusters
   verbs:
@@ -24,7 +24,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - qdrant.lburgazzoli.github.io
+  - qdrant.megacamelus.github.io
   resources:
   - clusters/status
   verbs:

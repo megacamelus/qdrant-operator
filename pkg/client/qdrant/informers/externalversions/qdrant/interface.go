@@ -18,8 +18,8 @@ limitations under the License.
 package qdrant
 
 import (
-	internalinterfaces "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/informers/externalversions/qdrant/v1alpha1"
+	internalinterfaces "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/informers/externalversions/qdrant/v1alpha1"
 )
 
 // Interface provides access to each of this group's versions.

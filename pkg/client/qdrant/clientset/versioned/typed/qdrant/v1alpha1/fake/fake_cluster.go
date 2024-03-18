@@ -22,8 +22,8 @@ import (
 	json "encoding/json"
 	"fmt"
 
-	v1alpha1 "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
-	qdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
+	v1alpha1 "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantv1alpha1 "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	types "k8s.io/apimachinery/pkg/types"

@@ -22,9 +22,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/clientset/versioned"
-	internalinterfaces "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/informers/externalversions/internalinterfaces"
-	qdrant "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/informers/externalversions/qdrant"
+	versioned "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned"
+	internalinterfaces "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/informers/externalversions/internalinterfaces"
+	qdrant "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/informers/externalversions/qdrant"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

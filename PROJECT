@@ -2,7 +2,7 @@
 # This file is used to track the info used to scaffold your project
 # and allow the plugins properly work.
 # More info: https://book.kubebuilder.io/reference/project-config.html
-domain: lburgazzoli.github.io
+domain: megacamelus.github.io
 layout:
 - go.kubebuilder.io/v4
 multigroup: true
@@ -10,23 +10,23 @@ plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: qdrant-operator
-repo: github.com/lburgazzoli/qdrant-operator
+repo: github.com/megacamelus/qdrant-operator
 resources:
 - api:
     crdVersion: v1
     namespaced: true
   controller: true
-  domain: lburgazzoli.github.io
+  domain: megacamelus.github.io
   group: qdrant
   kind: Cluster
-  path: github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1
+  path: github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
     namespaced: true
-  domain: lburgazzoli.github.io
+  domain: megacamelus.github.io
   group: qdrant
   kind: Collection
-  path: github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1
+  path: github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1
   version: v1alpha1
 version: "3"

@@ -18,7 +18,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	internalinterfaces "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/informers/externalversions/internalinterfaces"
+	internalinterfaces "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.

@@ -18,8 +18,8 @@ limitations under the License.
 package applyconfiguration
 
 import (
-	v1alpha1 "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
-	qdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
+	v1alpha1 "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantv1alpha1 "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 )
 

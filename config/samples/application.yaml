@@ -8,7 +8,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: config/standalone
-    repoURL: 'https://github.com/lburgazzoli/qdrant-operator'
+    repoURL: 'https://github.com/megacamelus/qdrant-operator'
     targetRevision: HEAD
     kustomize:
       namespace: 'camel-ai'

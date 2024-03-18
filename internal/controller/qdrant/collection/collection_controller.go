@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
-	"github.com/lburgazzoli/qdrant-operator/pkg/defaults"
+	"github.com/megacamelus/qdrant-operator/pkg/defaults"
 	"go.uber.org/multierr"
 
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -39,9 +39,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	"github.com/lburgazzoli/qdrant-operator/pkg/controller/client"
+	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
 
-	qdrantApi "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantApi "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
 )
 
 func NewCollectionReconciler(manager ctrl.Manager) (*Reconciler, error) {
@@ -84,11 +84,11 @@ type Reconciler struct {
 	l       logr.Logger
 }
 
-// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=collections,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=collections/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=collections/finalizers,verbs=update
-// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=clusters,verbs=get;list;watch
-// +kubebuilder:rbac:groups=qdrant.lburgazzoli.github.io,resources=clusters/status,verbs=get
+// +kubebuilder:rbac:groups=qdrant.megacamelus.github.io,resources=collections,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=qdrant.megacamelus.github.io,resources=collections/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=qdrant.megacamelus.github.io,resources=collections/finalizers,verbs=update
+// +kubebuilder:rbac:groups=qdrant.megacamelus.github.io,resources=clusters,verbs=get;list;watch
+// +kubebuilder:rbac:groups=qdrant.megacamelus.github.io,resources=clusters/status,verbs=get
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *Reconciler) SetupWithManager(ctx context.Context, mgr ctrl.Manager) error {

@@ -39,7 +39,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
 # qdrant/qdrant-operator-bundle:$VERSION and qdrant/qdrant-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= quay.io/lburgazzoli/qdrant-operator
+IMAGE_TAG_BASE ?= quay.io/megacamelus/qdrant-operator
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
@@ -70,7 +70,7 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-GOLDFLAGS = -X 'github.com/qdrant/qdrant-operator/pkg/defaults.QdrantImage=${QDRANT_IMAGE}'
+GOLDFLAGS = -X 'github.com/megacamelus/qdrant-operator/pkg/defaults.QdrantImage=${QDRANT_IMAGE}'
 # Setting SHELL to bash allows bash commands to be executed by recipes.
 # Options are set to exit when a recipe line exits non-zero or a piped command fails.
 SHELL = /usr/bin/env bash -o pipefail

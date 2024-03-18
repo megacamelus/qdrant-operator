@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
-	"github.com/lburgazzoli/qdrant-operator/pkg/apply"
-	"github.com/lburgazzoli/qdrant-operator/pkg/controller/client"
-	"github.com/lburgazzoli/qdrant-operator/pkg/defaults"
+	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
+	"github.com/megacamelus/qdrant-operator/pkg/apply"
+	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
+	"github.com/megacamelus/qdrant-operator/pkg/defaults"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 

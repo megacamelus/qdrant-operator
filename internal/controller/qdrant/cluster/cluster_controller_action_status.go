@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
+	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
 	appsv1 "k8s.io/api/apps/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/lburgazzoli/qdrant-operator/pkg/controller/client"
+	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
 
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 )

@@ -23,9 +23,9 @@ import (
 	"fmt"
 	"time"
 
-	v1alpha1 "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
-	qdrantv1alpha1 "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
-	scheme "github.com/lburgazzoli/qdrant-operator/pkg/client/qdrant/clientset/versioned/scheme"
+	v1alpha1 "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantv1alpha1 "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
+	scheme "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"

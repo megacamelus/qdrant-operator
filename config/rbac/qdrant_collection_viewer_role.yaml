@@ -12,7 +12,7 @@ metadata:
   name: collection-viewer-role
 rules:
 - apiGroups:
-  - qdrant.lburgazzoli.github.io
+  - qdrant.megacamelus.github.io
   resources:
   - collections
   verbs:
@@ -20,7 +20,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - qdrant.lburgazzoli.github.io
+  - qdrant.megacamelus.github.io
   resources:
   - collections/status
   verbs:

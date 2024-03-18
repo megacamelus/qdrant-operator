@@ -19,7 +19,7 @@ package cluster
 import (
 	"strings"
 
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
+	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
 
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/selection"

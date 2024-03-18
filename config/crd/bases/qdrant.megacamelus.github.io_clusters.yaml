@@ -4,33 +4,29 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: collections.qdrant.lburgazzoli.github.io
+  name: clusters.qdrant.megacamelus.github.io
 spec:
-  group: qdrant.lburgazzoli.github.io
+  group: qdrant.megacamelus.github.io
   names:
-    kind: Collection
-    listKind: CollectionList
-    plural: collections
-    singular: collection
+    kind: Cluster
+    listKind: ClusterList
+    plural: clusters
+    singular: cluster
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: The Cluster
-      jsonPath: .spec.cluster
-      name: Cluster
+    - description: The Http Endpoint
+      jsonPath: .status.httpEndpoint
+      name: Http
       type: string
-    - description: The Collection Name
-      jsonPath: .status.collection.name
-      name: Collection Name
-      type: string
-    - description: The Collection Status
-      jsonPath: .status.collection.status
-      name: Collection Status
+    - description: The Grpc Endpoint
+      jsonPath: .status.grpcEndpoint
+      name: Grpc
       type: string
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Collection is the Schema for the collections API.
+        description: Cluster is the Schema for the clusters API.
         properties:
           apiVersion:
             description: |-
@@ -50,52 +46,14 @@ spec:
           metadata:
             type: object
           spec:
-            description: CollectionSpec defines the desired state of Collection.
+            description: ClusterSpec defines the desired state of Cluster.
             properties:
-              cluster:
+              image:
                 type: string
-              name:
-                type: string
-              vectorParams:
-                properties:
-                  distance:
-                    enum:
-                    - Cosine
-                    - Euclid
-                    - Dot
-                    - Manhattan
-                    type: string
-                  size:
-                    format: int64
-                    type: integer
-                required:
-                - distance
-                - size
-                type: object
-            required:
-            - cluster
             type: object
           status:
-            description: CollectionStatus defines the observed state of Collection.
+            description: ClusterStatus defines the observed state of Cluster.
             properties:
-              collection:
-                properties:
-                  name:
-                    type: string
-                  pointsCount:
-                    format: int64
-                    type: integer
-                  status:
-                    type: string
-                  vectorsCount:
-                    format: int64
-                    type: integer
-                required:
-                - name
-                - pointsCount
-                - status
-                - vectorsCount
-                type: object
               conditions:
                 items:
                   description: "Condition contains details for one aspect of the current
@@ -165,6 +123,10 @@ spec:
                   - type
                   type: object
                 type: array
+              grpcEndpoint:
+                type: string
+              httpEndpoint:
+                type: string
               observedGeneration:
                 format: int64
                 type: integer

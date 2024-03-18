@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant"
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/cluster"
-	"github.com/lburgazzoli/qdrant-operator/internal/controller/qdrant/collection"
+	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
+	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant/cluster"
+	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant/collection"
 
-	qdrantApi "github.com/lburgazzoli/qdrant-operator/api/qdrant/v1alpha1"
+	qdrantApi "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -17,8 +17,8 @@ import (
 	rtcache "sigs.k8s.io/controller-runtime/pkg/cache"
 	rtclient "sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/lburgazzoli/qdrant-operator/pkg/controller"
-	"github.com/lburgazzoli/qdrant-operator/pkg/defaults"
+	"github.com/megacamelus/qdrant-operator/pkg/controller"
+	"github.com/megacamelus/qdrant-operator/pkg/defaults"
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
@@ -35,7 +35,7 @@ func NewRunCmd() *cobra.Command {
 		MetricsAddr:                   ":8080",
 		ProbeAddr:                     ":8081",
 		PprofAddr:                     "",
-		LeaderElectionID:              "9aa9f118.qdrant.lburgazzoli.github.io",
+		LeaderElectionID:              "9aa9f118.qdrant.megacamelus.github.io",
 		EnableLeaderElection:          true,
 		ReleaseLeaderElectionOnCancel: true,
 		LeaderElectionNamespace:       "",
