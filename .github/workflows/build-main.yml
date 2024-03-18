@@ -24,7 +24,7 @@ jobs:
           path: qdrant-operator   
                  
       - name: "Checkout - Camel Assistant Manifests"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: megacamelus/camel-assistant-manifests
           token: ${{ secrets.PR_TOKEN }}
