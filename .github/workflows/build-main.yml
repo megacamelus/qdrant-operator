@@ -72,6 +72,8 @@ jobs:
 
           cd ${{ env.PROJECTS }}/camel-assistant-manifests
 
+          tree .
+          
           git checkout -b "${BRANCH_NAME}
           git config user.email "megacamelus@megacamelus.github.com"
           git config user.name "megacamelus"
@@ -81,17 +83,17 @@ jobs:
           cd ${{ env.PROJECTS }}/camel-assistant-manifests
           cat etc/kubernetes/manifests/qdrant/kustomization.yaml
 
-          git commit -m "Update qdrant-operator image" etc/kubernetes/manifests/qdrant/kustomization.yaml
-          git reset --hard
-          git push -u origin ${BRANCH_NAME}
+          #git commit -m "Update qdrant-operator image" etc/kubernetes/manifests/qdrant/kustomization.yaml
+          #git reset --hard
+          #git push -u origin ${BRANCH_NAME}
 
           # GH CLI can't find the branch on remote... needs some time :)
-          sleep 15
+          #sleep 15
 
-          gh config set prompt disabled
+          #gh config set prompt disabled
 
-          gh pr create \
-            --fill \
-            --base main \
-            --title "chore(qdrant): update qdrant-operator image to ${IMAGE_NAME}" \
-            --body "image: ${IMAGE_NAME}"
+          #gh pr create \
+          #  --fill \
+          #  --base main \
+          #  --title "chore(qdrant): update qdrant-operator image to ${IMAGE_NAME}" \
+          #  --body "image: ${IMAGE_NAME}"
