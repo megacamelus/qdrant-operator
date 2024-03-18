@@ -75,14 +75,13 @@ jobs:
         run: |
           cd ${{ env.PROJECTS }}/camel-assistant-manifests
           
-          echo "$OPERATOR_IMAGE"
-          echo "$IMAGE_DIGEST"
-          echo "$IMAGE_NAME"
-          echo "$BRANCH_NAME"
+          echo "###############################################################################"
+          echo "operator image : $OPERATOR_IMAGE"
+          echo "image name     : $IMAGE_NAME"
+          echo "branch         : $BRANCH_NAME"
+          echo "###############################################################################"
 
-          #cd ${{ env.PROJECTS }}/camel-assistant-manifests
-
-          #tree .
+          tree .
 
           #git checkout -b "${BRANCH_NAME}
           #git config user.email "megacamelus@megacamelus.github.com"
