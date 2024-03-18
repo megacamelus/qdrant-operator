@@ -59,16 +59,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd ${{ env.PROJECTS }}/camel-assistant-manifests
+          cd ${{ env.PROJECTS }}/qdrant-operator
+          make crane
 
-          git config user.email "megacamelus@megacamelus.github.com"
-          git config user.name "megacamelus"
-
-          IMAGE_DIGEST=$(crane digest ${OPERATOR_IMAGE}:latest)
-          IMAGE="${OPERATOR_IMAGE}@${IMAGE_DIGEST}""
+          IMAGE_DIGEST=$(./bin/crane digest ${OPERATOR_IMAGE}:latest)
+          IMAGE="${OPERATOR_IMAGE}@${IMAGE_DIGEST}"
           
           echo "$OPERATOR_IMAGE"
           echo "$IMAGE_DIGEST"
           echo "$IMAGE_NAME"
+
+          cd ${{ env.PROJECTS }}/camel-assistant-manifests
+
+          git config user.email "megacamelus@megacamelus.github.com"
+          git config user.name "megacamelus"
 
           cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
