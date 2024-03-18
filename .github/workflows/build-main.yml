@@ -93,15 +93,15 @@ jobs:
           git config user.name "megacamelus"
           git commit -m "Update qdrant-operator image" etc/kubernetes/manifests/qdrant/kustomization.yaml
           git reset --hard
-          #git push -u origin ${BRANCH_NAME}
+          git push -u origin ${BRANCH_NAME}
 
           # GH CLI can't find the branch on remote... needs some time :)
-          #sleep 15
+          sleep 15
 
-          #gh config set prompt disabled
+          gh config set prompt disabled
 
-          #gh pr create \
-          #  --fill \
-          #  --base main \
-          #  --title "chore(qdrant): update qdrant-operator image to ${IMAGE_NAME}" \
-          #  --body "image: ${IMAGE_NAME}"
+          gh pr create \
+            --fill \
+            --base main \
+            --title "chore(qdrant): update qdrant-operator image to ${IMAGE_NAME}" \
+            --body "image: ${IMAGE_NAME}"
