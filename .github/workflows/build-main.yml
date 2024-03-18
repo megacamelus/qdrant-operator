@@ -76,9 +76,9 @@ jobs:
           cd ${{ env.PROJECTS }}/camel-assistant-manifests
           
           echo "###############################################################################"
-          echo "operator image : $OPERATOR_IMAGE"
-          echo "image name     : $IMAGE_NAME"
-          echo "branch         : $BRANCH_NAME"
+          echo "operator image : ${OPERATOR_IMAGE}"
+          echo "image name     : ${IMAGE_NAME}"
+          echo "branch         : ${BRANCH_NAME}"
           echo "###############################################################################"
 
           tree .
@@ -88,7 +88,7 @@ jobs:
           cd ${{ env.PROJECTS }}/camel-assistant-manifests
           cat etc/kubernetes/manifests/qdrant/kustomization.yaml
 
-          git checkout -b "${BRANCH_NAME}
+          git checkout -b "${BRANCH_NAME}"
           git config user.email "megacamelus@megacamelus.github.com"
           git config user.name "megacamelus"
           git commit -m "Update qdrant-operator image" etc/kubernetes/manifests/qdrant/kustomization.yaml
