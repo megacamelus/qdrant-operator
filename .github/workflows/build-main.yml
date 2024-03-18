@@ -63,7 +63,7 @@ jobs:
           make crane
 
           IMAGE_DIGEST=$(./bin/crane digest ${OPERATOR_IMAGE}:latest)
-          IMAGE="${OPERATOR_IMAGE}@${IMAGE_DIGEST}"
+          IMAGE_NAME="${OPERATOR_IMAGE}@${IMAGE_DIGEST}"
           
           echo "$OPERATOR_IMAGE"
           echo "$IMAGE_DIGEST"
@@ -75,3 +75,5 @@ jobs:
           git config user.name "megacamelus"
 
           cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
+
+          cat  etc/kubernetes/manifests/qdrant/customization.yaml
