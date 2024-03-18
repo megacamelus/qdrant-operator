@@ -87,10 +87,10 @@ jobs:
           #git config user.email "megacamelus@megacamelus.github.com"
           #git config user.name "megacamelus"
 
-          #cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
+          cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
 
-          #d ${{ env.PROJECTS }}/camel-assistant-manifests
-          #cat etc/kubernetes/manifests/qdrant/kustomization.yaml
+          cd ${{ env.PROJECTS }}/camel-assistant-manifests
+          cat etc/kubernetes/manifests/qdrant/kustomization.yaml
 
           #git commit -m "Update qdrant-operator image" etc/kubernetes/manifests/qdrant/kustomization.yaml
           #git reset --hard
