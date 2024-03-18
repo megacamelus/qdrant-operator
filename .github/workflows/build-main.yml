@@ -76,4 +76,4 @@ jobs:
 
           cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
 
-          cat  etc/kubernetes/manifests/qdrant/customization.yaml
+          cat  etc/kubernetes/manifests/qdrant/kustomization.yaml
