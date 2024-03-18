@@ -83,17 +83,16 @@ jobs:
 
           tree .
 
-          #git checkout -b "${BRANCH_NAME}
-          #git config user.email "megacamelus@megacamelus.github.com"
-          #git config user.name "megacamelus"
-
           cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
 
           cd ${{ env.PROJECTS }}/camel-assistant-manifests
           cat etc/kubernetes/manifests/qdrant/kustomization.yaml
 
-          #git commit -m "Update qdrant-operator image" etc/kubernetes/manifests/qdrant/kustomization.yaml
-          #git reset --hard
+          git checkout -b "${BRANCH_NAME}
+          git config user.email "megacamelus@megacamelus.github.com"
+          git config user.name "megacamelus"
+          git commit -m "Update qdrant-operator image" etc/kubernetes/manifests/qdrant/kustomization.yaml
+          git reset --hard
           #git push -u origin ${BRANCH_NAME}
 
           # GH CLI can't find the branch on remote... needs some time :)
