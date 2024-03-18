@@ -54,34 +54,43 @@ jobs:
           cd ${{ env.PROJECTS }}/qdrant-operator   
           make docker-build 
           make docker-push
-
-      - name: "Create PR for camel-assistant-manifests"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: "Determine Container image name"
+        id: "compute-image-name"
         run: |
-          cd ${{ env.PROJECTS }}/qdrant-operator
+          cd ${{ env.PROJECTS }}/qdrant-operator   
           make crane
 
           IMAGE_DIGEST=$(./bin/crane digest ${OPERATOR_IMAGE}:latest)
           IMAGE_NAME="${OPERATOR_IMAGE}@${IMAGE_DIGEST}"
-          BRANCH_NAME="ci-${GITHUB_RUN_ID}""
+
+          echo "operator_image=${IMAGE_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: "Create PR for camel-assistant-manifests"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_NAME:  ${{ steps.compute-image-name.outputs.operator_image }}
+          BRANCH_NAME: "ci-${GITHUB_RUN_ID}"
+        run: |
+          cd ${{ env.PROJECTS }}/camel-assistant-manifests
           
           echo "$OPERATOR_IMAGE"
           echo "$IMAGE_DIGEST"
           echo "$IMAGE_NAME"
+          echo "$BRANCH_NAME"
 
-          cd ${{ env.PROJECTS }}/camel-assistant-manifests
+          #cd ${{ env.PROJECTS }}/camel-assistant-manifests
 
-          tree .
-          
-          git checkout -b "${BRANCH_NAME}
-          git config user.email "megacamelus@megacamelus.github.com"
-          git config user.name "megacamelus"
+          #tree .
 
-          cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
+          #git checkout -b "${BRANCH_NAME}
+          #git config user.email "megacamelus@megacamelus.github.com"
+          #git config user.name "megacamelus"
 
-          cd ${{ env.PROJECTS }}/camel-assistant-manifests
-          cat etc/kubernetes/manifests/qdrant/kustomization.yaml
+          #cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
+
+          #d ${{ env.PROJECTS }}/camel-assistant-manifests
+          #cat etc/kubernetes/manifests/qdrant/kustomization.yaml
 
           #git commit -m "Update qdrant-operator image" etc/kubernetes/manifests/qdrant/kustomization.yaml
           #git reset --hard
