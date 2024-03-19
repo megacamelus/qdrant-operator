@@ -5,7 +5,7 @@ go 1.22
 require (
 	github.com/evanphx/json-patch v5.9.0+incompatible
 	github.com/go-logr/logr v1.4.1
-	github.com/qdrant/go-client v1.7.0
+	github.com/qdrant/go-client v1.8.0
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/multierr v1.11.0
