@@ -85,7 +85,7 @@ jobs:
 
           tree .
 
-          cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
+          cd etc/kubernetes/infra/qdrant && kustomize edit set image ${IMAGE_NAME}
           cat etc/kubernetes/infra/qdrant/kustomization.yaml
 
           git checkout -b "${BRANCH_NAME}"
