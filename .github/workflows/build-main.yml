@@ -20,8 +20,6 @@ jobs:
     steps:
       - name: "Checkout - Qdrant Operator"
         uses: actions/checkout@v4
-        with:
-          path: qdrant-operator   
                  
       - name: "Checkout - Camel Assistant Manifests"
         uses: actions/checkout@v4
@@ -33,8 +31,8 @@ jobs:
       - name: "Set up Go"
         uses: actions/setup-go@v5
         with:
-          go-version-file: 'qdrant-operator/go.mod'
-          cache-dependency-path: 'qdrant-operator/go.sum'
+          go-version-file: 'go.mod'
+          cache-dependency-path: 'go.sum'
           check-latest: true
         
       - name: "Login to Container registry"
@@ -45,24 +43,30 @@ jobs:
           password: ${{ secrets.QUAY_PASSWORD }}
 
       - name: "Build"
-        run: |
-          cd ${{ env.PROJECTS }}/qdrant-operator   
+        run: |   
           make build
           make test
           
       - name: "Build Container image"
-        run: |
-          cd ${{ env.PROJECTS }}/qdrant-operator   
+        run: |  
           make docker-build 
           make docker-push
-          
+
+  pr:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:       
+      - name: "Checkout - Camel Assistant Manifests"
+        uses: actions/checkout@v4
+        with:
+          repository: megacamelus/camel-assistant-manifests
+          token: ${{ secrets.PR_TOKEN }}
+
       - name: "Determine Container image name"
         id: "compute-image-name"
         run: |
-          cd ${{ env.PROJECTS }}/qdrant-operator   
-          make crane
-
-          IMAGE_DIGEST=$(./bin/crane digest ${OPERATOR_IMAGE}:latest)
+          IMAGE_DIGEST=$(docker run --rm gcr.io/go-containerregistry/crane digest ${OPERATOR_IMAGE}:latest)
           IMAGE_NAME="${OPERATOR_IMAGE}@${IMAGE_DIGEST}"
 
           echo "operator_image=${IMAGE_NAME}" >> "$GITHUB_OUTPUT"
@@ -72,9 +76,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PR_TOKEN }}
           IMAGE_NAME:  ${{ steps.compute-image-name.outputs.operator_image }}
           BRANCH_NAME: ci-${{ github.run_id }}
-        run: |
-          cd ${{ env.PROJECTS }}/camel-assistant-manifests
-          
+        run: |          
           echo "###############################################################################"
           echo "operator image : ${OPERATOR_IMAGE}"
           echo "image name     : ${IMAGE_NAME}"
@@ -84,8 +86,6 @@ jobs:
           tree .
 
           cd etc/kubernetes/manifests/qdrant && kustomize edit set image ${IMAGE_NAME}
-
-          cd ${{ env.PROJECTS }}/camel-assistant-manifests
           cat etc/kubernetes/infra/qdrant/kustomization.yaml
 
           git checkout -b "${BRANCH_NAME}"
