@@ -135,7 +135,7 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 							WithPersistentVolumeClaim(corev1ac.PersistentVolumeClaimVolumeSource().
 								WithClaimName(rr.Cluster.Name)),
 						corev1ac.Volume().
-							WithName(rr.Cluster.Name+"-snapshot").
+							WithName(rr.Cluster.Name+"-snapshots").
 							WithEmptyDir(corev1ac.EmptyDirVolumeSource()),
 						corev1ac.Volume().
 							WithName(rr.Cluster.Name+"-init").
@@ -163,8 +163,8 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 								WithName(rr.Cluster.Name+"-storage").
 								WithMountPath("/qdrant/storage"),
 							corev1ac.VolumeMount().
-								WithName(rr.Cluster.Name+"-snapshot").
-								WithMountPath("/qdrant/snapshot"),
+								WithName(rr.Cluster.Name+"-snapshots").
+								WithMountPath("/qdrant/snapshots"),
 							corev1ac.VolumeMount().
 								WithName(rr.Cluster.Name+"-init").
 								WithMountPath("/qdrant/init"))))))
