@@ -10,5 +10,5 @@ const (
 )
 
 var (
-	QdrantImage = "qdrant/qdrant:v1.7.4-unprivileged"
+	QdrantImage = "qdrant/qdrant:v1.8.3-unprivileged"
 )
