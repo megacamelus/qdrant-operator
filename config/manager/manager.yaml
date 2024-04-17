@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: qdrant-operator
   labels:
-    control-plane: controller-manager
+    control-plane: qdrant-operator
     app.kubernetes.io/name: deployment
     app.kubernetes.io/instance: controller-manager
     app.kubernetes.io/component: manager

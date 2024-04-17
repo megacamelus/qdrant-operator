@@ -4,7 +4,6 @@
 # - use the VERSION as arg of the bundle target (e.g make bundle VERSION=0.0.2)
 # - use environment variables to overwrite this value (e.g export VERSION=0.0.2)
 VERSION ?= 0.0.5
-IMG_VERSION ?= latest
 
 LINT_GOGC := 10
 LINT_DEADLINE := 10m
@@ -34,16 +33,13 @@ BUNDLE_DEFAULT_CHANNEL := --default-channel=$(DEFAULT_CHANNEL)
 endif
 BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
-# IMAGE_TAG_BASE defines the docker.io namespace and part of the image name for remote images.
-# This variable is used to construct full image tags for bundle and catalog images.
-#
-# For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
-# qdrant/qdrant-operator-bundle:$VERSION and qdrant/qdrant-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= quay.io/megacamelus/qdrant-operator
+CONTAINER_IMAGE_TAG_BASE ?= quay.io/megacamelus/qdrant-operator
+CONTAINER_IMAGE_VERSION ?= latest
+CONTAINER_IMAGE ?= ${CONTAINER_IMAGE_TAG_BASE}:${CONTAINER_IMAGE_VERSION}
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
-BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
+BUNDLE_IMG ?= $(CONTAINER_IMAGE_TAG_BASE)-bundle:v$(VERSION)
 
 # BUNDLE_GEN_FLAGS are the flags passed to the operator-sdk generate bundle command
 BUNDLE_GEN_FLAGS ?= -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
@@ -56,9 +52,6 @@ ifeq ($(USE_IMAGE_DIGESTS), true)
 	BUNDLE_GEN_FLAGS += --use-image-digests
 endif
 
-
-# Image URL to use all building/pushing image targets
-IMG ?= ${IMAGE_TAG_BASE}:${IMG_VERSION}
 
 # qdrant image that is installed by the operator
 QDRANT_IMAGE ?= qdrant/qdrant:v1.8.3-unprivileged
@@ -170,11 +163,11 @@ check/lint/fix: golangci-lint
 
 .PHONY: docker-build
 docker-build: test ## Build docker image with the manager.
-	docker build --build-arg="LDFLAGS=${GOLDFLAGS}" -t ${IMG} .
+	docker build --build-arg="LDFLAGS=${GOLDFLAGS}" -t ${CONTAINER_IMAGE} .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
-	docker push ${IMG}
+	docker push ${CONTAINER_IMAGE}
 
 ##@ Deployment
 
@@ -192,13 +185,13 @@ uninstall: manifests kustomize ## Uninstall CRDs from the K8s cluster specified 
 
 .PHONY: deploy
 deploy: manifests kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
-	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
+	cd config/manager && $(KUSTOMIZE) edit set image controller=${CONTAINER_IMAGE}
 	$(KUSTOMIZE) build config/standalone | kubectl apply -f -
 
 
 .PHONY: deploy/e2e
 deploy/e2e: manifests kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
-	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
+	cd config/manager && $(KUSTOMIZE) edit set image controller=${CONTAINER_IMAGE}
 	$(KUSTOMIZE) build config/e2e | kubectl apply -f -
 
 .PHONY: undeploy
@@ -272,7 +265,7 @@ $(OPM): $(LOCALBIN)
 .PHONY: bundle
 bundle: manifests kustomize operator-sdk yq ## Generate bundle manifests and metadata, then validate generated files.
 	$(OPERATOR_SDK) generate kustomize manifests -q
-	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
+	cd config/manager && $(KUSTOMIZE) edit set image controller=$(CONTAINER_IMAGE)
 	$(KUSTOMIZE) build config/manifests | $(OPERATOR_SDK) generate bundle --extra-service-accounts qdrant-backend $(BUNDLE_GEN_FLAGS)
 	$(YQ) -i '.metadata.annotations.containerImage = .spec.install.spec.deployments[0].spec.template.spec.containers[0].image' bundle/manifests/qdrant-operator.clusterserviceversion.yaml
 	$(OPERATOR_SDK) bundle validate ./bundle
@@ -290,7 +283,7 @@ bundle-push: ## Push the bundle image.
 BUNDLE_IMGS ?= $(BUNDLE_IMG)
 
 # The image tag given to the resulting catalog image (e.g. make catalog-build CATALOG_IMG=example.com/operator-catalog:v0.2.0).
-CATALOG_IMG ?= $(IMAGE_TAG_BASE)-catalog:v$(VERSION)
+CATALOG_IMG ?= $(CONTAINER_IMAGE_TAG_BASE)-catalog:v$(VERSION)
 
 # Set CATALOG_BASE_IMG to an existing catalog image tag to add $BUNDLE_IMGS to that image.
 ifneq ($(origin CATALOG_BASE_IMG), undefined)
