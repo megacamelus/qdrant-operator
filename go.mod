@@ -10,7 +10,7 @@ require (
 	github.com/itchyny/gojq v0.11.0
 	github.com/onsi/gomega v1.32.0
 	github.com/operator-framework/api v0.23.0
-	github.com/operator-framework/operator-lifecycle-manager v0.22.0
+	github.com/operator-framework/operator-lifecycle-manager v3.11.0+incompatible
 	github.com/qdrant/go-client v1.8.0
 	github.com/rs/xid v1.5.0
 	github.com/spf13/cobra v1.8.0
@@ -31,6 +31,7 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.2 // indirect
 	github.com/evanphx/json-patch/v5 v5.8.0 // indirect
