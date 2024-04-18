@@ -12,7 +12,7 @@ concurrency:
 
 env:
   PROJECTS: ${{ github.workspace }}
-  OPERATOR_IMAGE: "quay.io/megacamelus/qdrant-operator"
+  OPERATOR_IMAGE: quay.io/megacamelus/qdrant-operator
 
 jobs:
   #
