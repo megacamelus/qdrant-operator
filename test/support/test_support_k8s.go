@@ -150,3 +150,19 @@ func CustomResourceDefinition(t Test, name string) func(g gomega.Gomega) (*apiex
 		return answer, err
 	}
 }
+
+func ConfigMap(t Test, name string, namespace string) func(g gomega.Gomega) (*corev1.ConfigMap, error) {
+	return func(g gomega.Gomega) (*corev1.ConfigMap, error) {
+		answer, err := t.Client().CoreV1().ConfigMaps(namespace).Get(
+			t.Ctx(),
+			name,
+			metav1.GetOptions{},
+		)
+
+		if k8serrors.IsNotFound(err) {
+			return nil, nil
+		}
+
+		return answer, err
+	}
+}

@@ -3,4 +3,5 @@ kind: Cluster
 metadata:
   name: cluster-sample
 spec:
-
+  configuration:
+    log_level: DEBUG

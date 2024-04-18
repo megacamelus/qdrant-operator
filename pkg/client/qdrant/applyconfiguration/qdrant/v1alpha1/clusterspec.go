@@ -20,7 +20,8 @@ package v1alpha1
 // ClusterSpecApplyConfiguration represents an declarative configuration of the ClusterSpec type for use
 // with apply.
 type ClusterSpecApplyConfiguration struct {
-	Image *string `json:"image,omitempty"`
+	Image         *string                 `json:"image,omitempty"`
+	Configuration *JSONApplyConfiguration `json:"configuration,omitempty"`
 }
 
 // ClusterSpecApplyConfiguration constructs an declarative configuration of the ClusterSpec type for use with
@@ -34,5 +35,13 @@ func ClusterSpec() *ClusterSpecApplyConfiguration {
 // If called multiple times, the Image field is set to the value of the last call.
 func (b *ClusterSpecApplyConfiguration) WithImage(value string) *ClusterSpecApplyConfiguration {
 	b.Image = &value
+	return b
+}
+
+// WithConfiguration sets the Configuration field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Configuration field is set to the value of the last call.
+func (b *ClusterSpecApplyConfiguration) WithConfiguration(value *JSONApplyConfiguration) *ClusterSpecApplyConfiguration {
+	b.Configuration = value
 	return b
 }

@@ -48,6 +48,11 @@ spec:
           spec:
             description: ClusterSpec defines the desired state of Cluster.
             properties:
+              configuration:
+                description: |-
+                  JSON represents any valid JSON value.
+                  These types are supported: bool, int64, float64, string, []interface{}, map[string]interface{} and nil.
+                x-kubernetes-preserve-unknown-fields: true
               image:
                 type: string
             type: object
