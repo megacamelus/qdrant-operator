@@ -26,35 +26,24 @@ jobs:
       - test
 
   #
-  # build container image
+  # publish container image
   #
   container-image:
     needs:
       - test-e2e-operator
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Checkout - Qdrant Operator"
-        uses: actions/checkout@v4
+    uses: ./.github/workflows/publish.yml
+    with:
+      container-image-name: ${{ env.OPERATOR_IMAGE }}
+      container-image-version: "${{ github.ref_name }}-${{ github.sha }}"
+    secrets:
+      registry: "quay.io"
+      registry-username: ${{ secrets.QUAY_USERNAME }}
+      registry-password: ${{ secrets.QUAY_PASSWORD }}
 
-      - name: "Set up Go"
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: 'go.mod'
-          cache-dependency-path: 'go.sum'
-          check-latest: true
-        
-      - name: "Login to Container registry"
-        uses: docker/login-action@v3
-        with:
-          registry: "quay.io"
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-          
-      - name: "Build Container image"
-        run: |  
-          make docker-build 
-          make docker-push
-
+  #
+  # Open PR to the megacamelus/camel-assistant-manifests to update the qdrant operator
+  # container image
+  #
   pr:
     runs-on: ubuntu-latest
     needs:
