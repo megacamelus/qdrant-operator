@@ -97,4 +97,4 @@ jobs:
             --fill \
             --base main \
             --title "chore(qdrant): update qdrant-operator image to ${IMAGE_NAME}" \
-            --body "image: ${IMAGE_NAME}"
+            --body "ref: ${{ github.ref }}/${{ github.sha }}"
