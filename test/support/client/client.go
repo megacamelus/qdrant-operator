@@ -18,7 +18,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 
 	qdratClient "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned"
-	olmAC "github.com/operator-framework/operator-lifecycle-manager/pkg/api/client/clientset/versioned"
 	apiextClient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1"
 )
 
@@ -29,7 +28,6 @@ type Client struct {
 	dapr      qdratClient.Interface
 	discovery discovery.DiscoveryInterface
 	dynamic   dynamic.Interface
-	olm       olmAC.Interface
 	scheme    *runtime.Scheme
 	config    *rest.Config
 }
@@ -64,18 +62,12 @@ func New(t *testing.T) (*Client, error) {
 		return nil, err
 	}
 
-	oClient, err := olmAC.NewForConfig(cfg)
-	if err != nil {
-		return nil, err
-	}
-
 	c := Client{
 		Interface:                kubeClient,
 		ApiextensionsV1Interface: extClient,
 		discovery:                discoveryClient,
 		dynamic:                  dynamicClient,
 		dapr:                     dpClient,
-		olm:                      oClient,
 		config:                   cfg,
 		scheme:                   scheme.Scheme,
 	}
@@ -91,9 +83,6 @@ func (c *Client) Discovery() discovery.DiscoveryInterface {
 }
 func (c *Client) Dynamic() dynamic.Interface {
 	return c.dynamic
-}
-func (c *Client) OLM() olmAC.Interface {
-	return c.olm
 }
 func (c *Client) Scheme() *runtime.Scheme {
 	return c.scheme
