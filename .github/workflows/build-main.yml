@@ -34,7 +34,7 @@ jobs:
     uses: ./.github/workflows/publish.yml
     with:
       container-image-name: quay.io/megacamelus/qdrant-operator
-      container-image-version: ${{ github.ref_name }}-${{ github.sha }}
+      container-image-version: latest
     secrets:
       registry: "quay.io"
       registry-username: ${{ secrets.QUAY_USERNAME }}
