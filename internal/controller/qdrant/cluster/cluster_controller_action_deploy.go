@@ -116,6 +116,8 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 
 	envs := make([]*corev1ac.EnvVarApplyConfiguration, 0)
 	envs = append(envs, apply.WithEnvFromField("NAMESPACE", "metadata.namespace"))
+	envs = append(envs, apply.WithEnv("QDRANT__LOG_LEVEL", "DEBUG"))
+	envs = append(envs, apply.WithEnv("QDRANT__TELEMETRY_DISABLED", "true"))
 
 	return appsv1ac.Deployment(rr.Cluster.Name, rr.Cluster.Namespace).
 		WithOwnerReferences(apply.WithOwnerReference(rr.Cluster)).

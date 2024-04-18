@@ -13,6 +13,8 @@ import (
 	. "github.com/onsi/gomega"
 
 	qdrantAc "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
+
+	pb "github.com/qdrant/go-client/qdrant"
 )
 
 func TestClusterDeploy(t *testing.T) {
@@ -32,6 +34,46 @@ func TestClusterDeploy(t *testing.T) {
 	test.Eventually(Cluster(test, cluster), TestTimeoutLong).Should(
 		WithTransform(AsJSON(), And(
 			MatchJQ(`.status.phase == "Ready"`),
+		)),
+	)
+}
+
+func TestCollectionDeploy(t *testing.T) {
+	test := With(t)
+
+	ns := test.NewTestNamespace()
+	name := xid.New().String()
+
+	cluster := DeployCluster(
+		test,
+		qdrantAc.Cluster(name, ns.Name),
+	)
+
+	test.Eventually(Deployment(test, cluster.Name, cluster.Namespace), TestTimeoutLong).Should(
+		WithTransform(ConditionStatus(appsv1.DeploymentAvailable), Equal(corev1.ConditionTrue)))
+
+	test.Eventually(Cluster(test, cluster), TestTimeoutLong).Should(
+		WithTransform(AsJSON(), And(
+			MatchJQ(`.status.phase == "Ready"`),
+		)),
+	)
+
+	collection := DeployCollection(
+		test,
+		qdrantAc.Collection(name, ns.Name).
+			WithSpec(
+				qdrantAc.CollectionSpec().
+					WithCluster(cluster.Name).
+					WithVectorParams(
+						qdrantAc.VectorParams().
+							WithDistance(pb.Distance_Cosine.String()).
+							WithSize(384))),
+	)
+
+	test.Eventually(Collection(test, collection), TestTimeoutLong).Should(
+		WithTransform(AsJSON(), And(
+			MatchJQ(`.status.phase == "Ready"`),
+			MatchJQ(`.status.collection.status == "Green"`),
 		)),
 	)
 }

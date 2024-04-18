@@ -39,7 +39,7 @@ func Collection(name, namespace string) *CollectionApplyConfiguration {
 	b.WithName(name)
 	b.WithNamespace(namespace)
 	b.WithKind("Collection")
-	b.WithAPIVersion("qdrant/v1alpha1")
+	b.WithAPIVersion("qdrant.megacamelus.github.io/v1alpha1")
 	return b
 }
 

@@ -95,7 +95,7 @@ func (a *applyAction) create(ctx context.Context, rr *ReconciliationRequest, cc 
 	if err != nil {
 		ge, ok := status.FromError(err)
 		if !ok {
-			return fmt.Errorf("could not create collections %s, %w", rr.Collection.Name, err)
+			return fmt.Errorf("could not create collections %s on cluster %s, %w", rr.Collection.Name, rr.Collection.Spec.Cluster, err)
 		}
 
 		switch {
@@ -106,7 +106,7 @@ func (a *applyAction) create(ctx context.Context, rr *ReconciliationRequest, cc 
 			// already exists
 			return nil
 		default:
-			return fmt.Errorf("could not create collections %s, %w", rr.Collection.Name, err)
+			return fmt.Errorf("could not create collections %s on cluster %s, %w", rr.Collection.Name, rr.Collection.Spec.Cluster, err)
 		}
 
 	}
@@ -122,7 +122,7 @@ func (a *applyAction) delete(ctx context.Context, rr *ReconciliationRequest, cc 
 	if err != nil {
 		ge, ok := status.FromError(err)
 		if !ok {
-			return fmt.Errorf("could not delete collections %s, %w", rr.Collection.Name, err)
+			return fmt.Errorf("could not delete collections %s on cluster %s, %w", rr.Collection.Name, rr.Collection.Spec.Cluster, err)
 		}
 
 		if ge.Code() == codes.InvalidArgument {
@@ -130,7 +130,7 @@ func (a *applyAction) delete(ctx context.Context, rr *ReconciliationRequest, cc 
 			// des not exist
 			return nil
 		} else {
-			return fmt.Errorf("could not delete collections %s, %w", rr.Collection.Name, err)
+			return fmt.Errorf("could not delete collections %s on cluster %s, %w", rr.Collection.Name, rr.Collection.Spec.Cluster, err)
 		}
 
 	}
