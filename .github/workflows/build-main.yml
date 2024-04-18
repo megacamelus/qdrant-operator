@@ -33,7 +33,7 @@ jobs:
       - test-e2e-operator
     uses: ./.github/workflows/publish.yml
     with:
-      container-image-name: ${{env.OPERATOR_IMAGE}}
+      container-image-name: quay.io/megacamelus/qdrant-operator
       container-image-version: ${{ github.ref_name }}-${{ github.sha }}
     secrets:
       registry: "quay.io"
