@@ -93,8 +93,13 @@ jobs:
 
           gh config set prompt disabled
 
+          BODY_FILE=$(mktemp)
+          
+          echo "ref  : ${{ github.ref }}/${{ github.sha }}" > ${BODY_FILE}
+          echo "image: ${IMAGE_NAME}" >> ${BODY_FILE}
+          
           gh pr create \
             --fill \
             --base main \
             --title "chore(qdrant): update qdrant-operator image to ${IMAGE_NAME}" \
-            --body "ref: ${{ github.ref }}/${{ github.sha }}"
+            --body-file ${BODY_FILE}
