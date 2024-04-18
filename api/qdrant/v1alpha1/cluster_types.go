@@ -24,6 +24,9 @@ import (
 type ClusterSpec struct {
 	// +optional
 	Image string `json:"image,omitempty"`
+
+	// +optional
+	Configuration *JSON `json:"configuration,omitempty"`
 }
 
 // ClusterStatus defines the observed state of Cluster.

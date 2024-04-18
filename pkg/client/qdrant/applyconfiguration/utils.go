@@ -42,6 +42,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &qdrantv1alpha1.CollectionSpecApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("CollectionStatus"):
 		return &qdrantv1alpha1.CollectionStatusApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("JSON"):
+		return &qdrantv1alpha1.JSONApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("VectorParams"):
 		return &qdrantv1alpha1.VectorParamsApplyConfiguration{}
 

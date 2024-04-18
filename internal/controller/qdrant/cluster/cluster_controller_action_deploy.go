@@ -2,6 +2,8 @@ package cluster
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 
 	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
@@ -114,10 +116,19 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 
 	labels := Labels(rr.Cluster)
 
+	var configChecksum []byte
+	if rr.Cluster.Spec.Configuration != nil {
+		cs := sha256.Sum256(rr.Cluster.Spec.Configuration.RawMessage)
+		configChecksum = cs[:]
+	} else {
+		cs := sha256.Sum256([]byte{})
+		configChecksum = cs[:]
+	}
+
 	envs := make([]*corev1ac.EnvVarApplyConfiguration, 0)
 	envs = append(envs, apply.WithEnvFromField("NAMESPACE", "metadata.namespace"))
-	envs = append(envs, apply.WithEnv("QDRANT__LOG_LEVEL", "DEBUG"))
 	envs = append(envs, apply.WithEnv("QDRANT__TELEMETRY_DISABLED", "true"))
+	envs = append(envs, apply.WithEnv("QDRANT_CONFIG_CHECKSUM", hex.EncodeToString(configChecksum)))
 
 	return appsv1ac.Deployment(rr.Cluster.Name, rr.Cluster.Namespace).
 		WithOwnerReferences(apply.WithOwnerReference(rr.Cluster)).
@@ -133,6 +144,13 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 						WithSeccompProfile(corev1ac.SeccompProfile().WithType(corev1.SeccompProfileTypeRuntimeDefault))).
 					WithVolumes(
 						corev1ac.Volume().
+							WithName(rr.Cluster.Name+"-config").
+							WithConfigMap(corev1ac.ConfigMapVolumeSource().
+								WithName(rr.Cluster.Name).
+								WithItems(corev1ac.KeyToPath().
+									WithKey("config").
+									WithPath("config.yaml"))),
+						corev1ac.Volume().
 							WithName(rr.Cluster.Name+"-storage").
 							WithPersistentVolumeClaim(corev1ac.PersistentVolumeClaimVolumeSource().
 								WithClaimName(rr.Cluster.Name)),
@@ -144,6 +162,7 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 							WithEmptyDir(corev1ac.EmptyDirVolumeSource())).
 					WithContainers(corev1ac.Container().
 						WithImage(image).
+						WithCommand("/qdrant/entrypoint.sh", "--config-path", "/opt/qdrant/config/config.yaml").
 						WithImagePullPolicy(corev1.PullAlways).
 						WithName(qdrant.QdrantAppName).
 						WithPorts(
@@ -161,6 +180,10 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 							WithRunAsNonRoot(true).
 							WithSeccompProfile(corev1ac.SeccompProfile().WithType(corev1.SeccompProfileTypeRuntimeDefault))).
 						WithVolumeMounts(
+							corev1ac.VolumeMount().
+								WithName(rr.Cluster.Name+"-config").
+								WithMountPath("/opt/qdrant/config").
+								WithReadOnly(true),
 							corev1ac.VolumeMount().
 								WithName(rr.Cluster.Name+"-storage").
 								WithMountPath("/qdrant/storage"),

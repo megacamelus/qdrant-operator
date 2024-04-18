@@ -58,6 +58,7 @@ func NewClusterReconciler(manager ctrl.Manager) (*Reconciler, error) {
 	rec.actions = make([]Action, 0)
 	rec.actions = append(rec.actions, NewServiceAction())
 	rec.actions = append(rec.actions, NewPersistentVolumeClaimAction())
+	rec.actions = append(rec.actions, NewDeployConfigAction())
 	rec.actions = append(rec.actions, NewDeployAction())
 	rec.actions = append(rec.actions, NewStatusAction())
 
@@ -89,6 +90,7 @@ type Reconciler struct {
 // +kubebuilder:rbac:groups=qdrant.megacamelus.github.io,resources=clusters,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=qdrant.megacamelus.github.io,resources=clusters/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=qdrant.megacamelus.github.io,resources=clusters/finalizers,verbs=update
+// +kubebuilder:rbac:groups="",resources=configmaps,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups="",resources=persistentvolumeclaims,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete

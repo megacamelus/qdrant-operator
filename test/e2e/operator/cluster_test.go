@@ -28,6 +28,8 @@ func TestClusterDeploy(t *testing.T) {
 		qdrantAc.Cluster(name, ns.Name),
 	)
 
+	test.Eventually(ConfigMap(test, cluster.Name, cluster.Namespace), TestTimeoutLong).Should(
+		Not(BeNil()))
 	test.Eventually(Deployment(test, cluster.Name, cluster.Namespace), TestTimeoutLong).Should(
 		WithTransform(ConditionStatus(appsv1.DeploymentAvailable), Equal(corev1.ConditionTrue)))
 
@@ -49,6 +51,8 @@ func TestCollectionDeploy(t *testing.T) {
 		qdrantAc.Cluster(name, ns.Name),
 	)
 
+	test.Eventually(ConfigMap(test, cluster.Name, cluster.Namespace), TestTimeoutLong).Should(
+		Not(BeNil()))
 	test.Eventually(Deployment(test, cluster.Name, cluster.Namespace), TestTimeoutLong).Should(
 		WithTransform(ConditionStatus(appsv1.DeploymentAvailable), Equal(corev1.ConditionTrue)))
 
