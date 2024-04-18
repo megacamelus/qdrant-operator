@@ -1,12 +1,19 @@
 package conditions
 
 import (
+	qdrantApi "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // ConditionType is a valid value for Condition.Type.
 type ConditionType string
+
+type GenericConditionType interface {
+	~string
+}
 
 // Getter interface defines methods that an object should implement in order to
 // use the conditions package for getting conditions.
@@ -34,4 +41,102 @@ func Get(from Getter, t ConditionType) *metav1.Condition {
 		}
 	}
 	return nil
+}
+
+func ConditionStatus[T GenericConditionType](object any, conditionType T) corev1.ConditionStatus {
+	switch o := object.(type) {
+	case Getter:
+		if c := Get(o, ConditionType(conditionType)); c != nil {
+			return corev1.ConditionStatus(c.Status)
+		}
+	case *appsv1.Deployment:
+		if o != nil {
+			for i := range o.Status.Conditions {
+				if string(o.Status.Conditions[i].Type) == string(conditionType) {
+					return o.Status.Conditions[i].Status
+				}
+			}
+		}
+	case appsv1.Deployment:
+		for i := range o.Status.Conditions {
+			if string(o.Status.Conditions[i].Type) == string(conditionType) {
+				return o.Status.Conditions[i].Status
+			}
+		}
+	case *corev1.Pod:
+		if o != nil {
+			for i := range o.Status.Conditions {
+				if string(o.Status.Conditions[i].Type) == string(conditionType) {
+					return o.Status.Conditions[i].Status
+				}
+			}
+		}
+	case *qdrantApi.Cluster:
+		if o != nil {
+			for i := range o.Status.Conditions {
+				if o.Status.Conditions[i].Type == string(conditionType) {
+					return corev1.ConditionStatus(o.Status.Conditions[i].Status)
+				}
+			}
+		}
+	case *qdrantApi.Collection:
+		if o != nil {
+			for i := range o.Status.Conditions {
+				if o.Status.Conditions[i].Type == string(conditionType) {
+					return corev1.ConditionStatus(o.Status.Conditions[i].Status)
+				}
+			}
+		}
+	}
+
+	return corev1.ConditionUnknown
+}
+
+func ConditionReason[T GenericConditionType](object any, conditionType T) string {
+	switch o := object.(type) {
+	case Getter:
+		if c := Get(o, ConditionType(conditionType)); c != nil {
+			return c.Reason
+		}
+	case *appsv1.Deployment:
+		if o != nil {
+			for i := range o.Status.Conditions {
+				if string(o.Status.Conditions[i].Type) == string(conditionType) {
+					return o.Status.Conditions[i].Reason
+				}
+			}
+		}
+	case appsv1.Deployment:
+		for i := range o.Status.Conditions {
+			if string(o.Status.Conditions[i].Type) == string(conditionType) {
+				return o.Status.Conditions[i].Reason
+			}
+		}
+	case *corev1.Pod:
+		if o != nil {
+			for i := range o.Status.Conditions {
+				if string(o.Status.Conditions[i].Type) == string(conditionType) {
+					return o.Status.Conditions[i].Reason
+				}
+			}
+		}
+	case *qdrantApi.Cluster:
+		if o != nil {
+			for i := range o.Status.Conditions {
+				if o.Status.Conditions[i].Type == string(conditionType) {
+					return o.Status.Conditions[i].Reason
+				}
+			}
+		}
+	case *qdrantApi.Collection:
+		if o != nil {
+			for i := range o.Status.Conditions {
+				if o.Status.Conditions[i].Type == string(conditionType) {
+					return o.Status.Conditions[i].Reason
+				}
+			}
+		}
+	}
+
+	return ""
 }

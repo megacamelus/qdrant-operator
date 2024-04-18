@@ -23,19 +23,10 @@ import (
 	"k8s.io/klog/v2"
 
 	corev1 "k8s.io/api/core/v1"
-
-	olmV1 "github.com/operator-framework/api/pkg/operators/v1"
-	olmV1Alpha1 "github.com/operator-framework/api/pkg/operators/v1alpha1"
 )
 
 func init() {
 	if err := qdrantApi.AddToScheme(scheme.Scheme); err != nil {
-		panic(err)
-	}
-	if err := olmV1.AddToScheme(scheme.Scheme); err != nil {
-		panic(err)
-	}
-	if err := olmV1Alpha1.AddToScheme(scheme.Scheme); err != nil {
 		panic(err)
 	}
 }
