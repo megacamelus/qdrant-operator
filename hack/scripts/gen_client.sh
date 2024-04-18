@@ -39,4 +39,20 @@ mkdir -p "${PROJECT_ROOT}/pkg/client/qdrant"
   --listers-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/listers \
   --output-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/informers
 
-cp -R "${TMP_DIR}"/client/github.com/megacamelus/qdrant-operator/pkg/client/qdrant/* "${PROJECT_ROOT}"/pkg/client/qdrant
+
+# This should not be needed but for some reasons, the applyconfiguration-gen tool
+# sets a wrong APIVersion for the Dapr type (operator/v1alpha1 instead of the one with
+# the domain qdrant.megacamelus.github.io/v1alpha1).
+#
+# See: https://github.com/kubernetes/code-generator/issues/150
+sed -i \
+  's/WithAPIVersion(\"qdrant\/v1alpha1\")/WithAPIVersion(\"qdrant.megacamelus.github.io\/v1alpha1\")/g' \
+  "${TMP_DIR}"/client/github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1/cluster.go
+sed -i \
+  's/WithAPIVersion(\"qdrant\/v1alpha1\")/WithAPIVersion(\"qdrant.megacamelus.github.io\/v1alpha1\")/g' \
+  "${TMP_DIR}"/client/github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1/collection.go
+
+
+cp -R \
+  "${TMP_DIR}"/client/github.com/megacamelus/qdrant-operator/pkg/client/qdrant/* \
+  "${PROJECT_ROOT}"/pkg/client/qdrant

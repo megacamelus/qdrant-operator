@@ -39,7 +39,7 @@ func Cluster(name, namespace string) *ClusterApplyConfiguration {
 	b.WithName(name)
 	b.WithNamespace(namespace)
 	b.WithKind("Cluster")
-	b.WithAPIVersion("qdrant/v1alpha1")
+	b.WithAPIVersion("qdrant.megacamelus.github.io/v1alpha1")
 	return b
 }
 

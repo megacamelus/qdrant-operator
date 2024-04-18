@@ -58,4 +58,4 @@ jobs:
           ./hack/scripts/deploy_e2e.sh
       - name: "Run Qdrant Operator e2e"
         run: |
-          make test/e2e/operator
+          make test/e2e

@@ -91,7 +91,7 @@ func DeployCollection(
 	t.Expect(err).
 		ToNot(gomega.HaveOccurred())
 
-	t.T().Logf("Cluster %s in namespace %s created", res.Name, res.Namespace)
+	t.T().Logf("Collectin %s in namespace %s created", res.Name, res.Namespace)
 
 	t.Cleanup(func() []runtime.Object {
 		return []runtime.Object{res}
