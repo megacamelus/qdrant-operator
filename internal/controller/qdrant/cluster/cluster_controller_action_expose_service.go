@@ -34,7 +34,7 @@ func (a *serviceAction) Configure(_ context.Context, _ *client.Client, b *builde
 	return b, nil
 }
 
-func (a *serviceAction) Cleanup(context.Context, *ReconciliationRequest) error {
+func (a *serviceAction) Cleanup(_ context.Context, _ *ReconciliationRequest) error {
 	return nil
 }
 
