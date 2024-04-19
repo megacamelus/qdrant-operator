@@ -17,7 +17,11 @@ limitations under the License.
 package cluster
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"strings"
+
+	qdrantApi "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
 
 	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
 
@@ -54,4 +58,20 @@ func AppSelector() (labels.Selector, error) {
 		Add(*appName)
 
 	return selector, nil
+}
+
+func Checksum(in *qdrantApi.JSON) []byte {
+	var cs [32]byte
+
+	if in != nil {
+		cs = sha256.Sum256(in.RawMessage)
+	} else {
+		cs = sha256.Sum256([]byte{})
+	}
+
+	return cs[:]
+}
+
+func EncodeToString(in *qdrantApi.JSON) string {
+	return hex.EncodeToString(Checksum(in))
 }

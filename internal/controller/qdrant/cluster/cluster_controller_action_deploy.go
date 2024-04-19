@@ -2,8 +2,6 @@ package cluster
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 
 	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
@@ -64,7 +62,7 @@ func (a *deployAction) Cleanup(ctx context.Context, rr *ReconciliationRequest) e
 		return fmt.Errorf("cannot delete cluster with name %s, in namespace %s as it is referenced by %d collections (%s)",
 			rr.Cluster.Name,
 			rr.Cluster.Namespace,
-			len(collections.Items),
+			len(refs),
 			refs)
 	}
 
@@ -116,19 +114,10 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 
 	labels := Labels(rr.Cluster)
 
-	var configChecksum []byte
-	if rr.Cluster.Spec.Configuration != nil {
-		cs := sha256.Sum256(rr.Cluster.Spec.Configuration.RawMessage)
-		configChecksum = cs[:]
-	} else {
-		cs := sha256.Sum256([]byte{})
-		configChecksum = cs[:]
-	}
-
 	envs := make([]*corev1ac.EnvVarApplyConfiguration, 0)
 	envs = append(envs, apply.WithEnvFromField("NAMESPACE", "metadata.namespace"))
 	envs = append(envs, apply.WithEnv("QDRANT__TELEMETRY_DISABLED", "true"))
-	envs = append(envs, apply.WithEnv("QDRANT_CONFIG_CHECKSUM", hex.EncodeToString(configChecksum)))
+	envs = append(envs, apply.WithEnv("QDRANT_CONFIG_CHECKSUM", EncodeToString(rr.Cluster.Spec.Configuration)))
 
 	return appsv1ac.Deployment(rr.Cluster.Name, rr.Cluster.Namespace).
 		WithOwnerReferences(apply.WithOwnerReference(rr.Cluster)).

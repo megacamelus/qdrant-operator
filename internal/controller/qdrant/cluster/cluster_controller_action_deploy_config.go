@@ -29,7 +29,7 @@ func (a *deployConfigAction) Configure(_ context.Context, _ *client.Client, b *b
 	return b, nil
 }
 
-func (a *deployConfigAction) Cleanup(ctx context.Context, rr *ReconciliationRequest) error {
+func (a *deployConfigAction) Cleanup(_ context.Context, _ *ReconciliationRequest) error {
 	return nil
 }
 

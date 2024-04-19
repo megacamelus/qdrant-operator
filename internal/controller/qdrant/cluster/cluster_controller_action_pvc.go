@@ -33,7 +33,7 @@ func (a *pvcAction) Configure(_ context.Context, _ *client.Client, b *builder.Bu
 	return b, nil
 }
 
-func (a *pvcAction) Cleanup(context.Context, *ReconciliationRequest) error {
+func (a *pvcAction) Cleanup(_ context.Context, _ *ReconciliationRequest) error {
 	return nil
 }
 
