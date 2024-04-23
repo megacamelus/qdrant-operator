@@ -54,7 +54,7 @@ endif
 
 
 # qdrant image that is installed by the operator
-QDRANT_IMAGE ?= qdrant/qdrant:v1.8.4-unprivileged
+QDRANT_IMAGE ?= qdrant/qdrant:v1.9.0-unprivileged
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
