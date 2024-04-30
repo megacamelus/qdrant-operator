@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
-	"github.com/megacamelus/qdrant-operator/pkg/apply"
 	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
+	"github.com/megacamelus/qdrant-operator/pkg/resources"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -60,7 +60,7 @@ func (a *pvcAction) Apply(ctx context.Context, rr *ReconciliationRequest) error 
 
 func (a *pvcAction) deploy(ctx context.Context, rr *ReconciliationRequest) error {
 	pvc := corev1ac.PersistentVolumeClaim(rr.Cluster.Name, rr.Cluster.Namespace).
-		WithOwnerReferences(apply.WithOwnerReference(rr.Cluster)).
+		WithOwnerReferences(resources.WithOwnerReference(rr.Cluster)).
 		WithLabels(Labels(rr.Cluster)).
 		WithSpec(corev1ac.PersistentVolumeClaimSpec().
 			WithAccessModes(corev1.ReadWriteOnce).

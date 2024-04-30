@@ -1,6 +1,7 @@
 package resources
 
 import (
+	"github.com/megacamelus/qdrant-operator/pkg/defaults"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
 	corev1 "k8s.io/api/core/v1"
@@ -22,11 +23,11 @@ func WithOwnerReference(object client.Object) *metav1ac.OwnerReferenceApplyConfi
 
 func WithHTTPProbe(path string, port int32) *corev1ac.ProbeApplyConfiguration {
 	return corev1ac.Probe().
-		WithInitialDelaySeconds(5).
-		WithPeriodSeconds(10).
-		WithFailureThreshold(10).
-		WithSuccessThreshold(1).
-		WithTimeoutSeconds(10).
+		WithInitialDelaySeconds(defaults.ProbeInitialDelay).
+		WithPeriodSeconds(defaults.ProbePeriod).
+		WithFailureThreshold(defaults.ProbeFailureThreshold).
+		WithSuccessThreshold(defaults.ProbeSuccessThreshold).
+		WithTimeoutSeconds(defaults.ProbeTimeout).
 		WithHTTPGet(corev1ac.HTTPGetAction().
 			WithPath(path).
 			WithPort(intstr.IntOrString{IntVal: port}).

@@ -41,7 +41,7 @@ linters:
     - goconst
     - gocyclo
     - godox
-    - goerr113
+    - err113
     - gofumpt
     - golint
     - gomnd
@@ -49,27 +49,26 @@ linters:
     - interfacer
     - ireturn
     - lll
-    - maligned
     - nakedret
     - nestif
     - nilnil
     - nlreturn
     - nosnakecase
     - paralleltest
-    - rowserrcheck
     - scopelint
-    - structcheck
-    - sqlclosecheck
     - tagliatelle
     - tenv
     - testpackage
     - varnamelen
-    - wastedassign
     - whitespace
     - wrapcheck
     - wsl
     - varcheck
-    - deadcode
     - ifshort
-    - inamedparam
+    - deadcode
+    - structcheck
+    - maligned
     - depguard
+    - inamedparam
+    - execinquery
+

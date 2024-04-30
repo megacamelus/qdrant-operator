@@ -20,8 +20,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
+	"github.com/megacamelus/qdrant-operator/pkg/defaults"
 	pb "github.com/qdrant/go-client/qdrant"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -59,7 +59,7 @@ func WithCollectionsClient(ctx context.Context, rr *ReconciliationRequest, f fun
 		return fmt.Errorf("unable to determine Grpc endpoint for qdrant cluster %s", rr.Collection.Spec.Cluster)
 	}
 
-	newCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	newCtx, cancel := context.WithTimeout(ctx, defaults.ContextTimeout)
 	defer cancel()
 
 	conn, err := grpc.DialContext(

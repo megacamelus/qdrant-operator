@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/megacamelus/qdrant-operator/pkg/resources"
+
 	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
-	"github.com/megacamelus/qdrant-operator/pkg/apply"
 	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
 	"github.com/megacamelus/qdrant-operator/pkg/defaults"
 
@@ -115,12 +116,12 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 	labels := Labels(rr.Cluster)
 
 	envs := make([]*corev1ac.EnvVarApplyConfiguration, 0)
-	envs = append(envs, apply.WithEnvFromField("NAMESPACE", "metadata.namespace"))
-	envs = append(envs, apply.WithEnv("QDRANT__TELEMETRY_DISABLED", "true"))
-	envs = append(envs, apply.WithEnv("QDRANT_CONFIG_CHECKSUM", EncodeToString(rr.Cluster.Spec.Configuration)))
+	envs = append(envs, resources.WithEnvFromField("NAMESPACE", "metadata.namespace"))
+	envs = append(envs, resources.WithEnv("QDRANT__TELEMETRY_DISABLED", "true"))
+	envs = append(envs, resources.WithEnv("QDRANT_CONFIG_CHECKSUM", EncodeToString(rr.Cluster.Spec.Configuration)))
 
 	return appsv1ac.Deployment(rr.Cluster.Name, rr.Cluster.Namespace).
-		WithOwnerReferences(apply.WithOwnerReference(rr.Cluster)).
+		WithOwnerReferences(resources.WithOwnerReference(rr.Cluster)).
 		WithLabels(labels).
 		WithSpec(appsv1ac.DeploymentSpec().
 			WithReplicas(1).
@@ -155,10 +156,10 @@ func (a *deployAction) deployment(rr *ReconciliationRequest) *appsv1ac.Deploymen
 						WithImagePullPolicy(corev1.PullAlways).
 						WithName(qdrant.QdrantAppName).
 						WithPorts(
-							apply.WithPort(qdrant.QdrantHTTPPortType, qdrant.QdrantHTTPPort),
-							apply.WithPort(qdrant.QdrantGrpcPortType, qdrant.QdrantGrpcPort)).
-						WithReadinessProbe(apply.WithHTTPProbe(qdrant.QdrantReadinessProbePath, qdrant.QdrantHTTPPort)).
-						WithLivenessProbe(apply.WithHTTPProbe(qdrant.QdrantLivenessProbePath, qdrant.QdrantHTTPPort)).
+							resources.WithPort(qdrant.QdrantHTTPPortType, qdrant.QdrantHTTPPort),
+							resources.WithPort(qdrant.QdrantGrpcPortType, qdrant.QdrantGrpcPort)).
+						WithReadinessProbe(resources.WithHTTPProbe(qdrant.QdrantReadinessProbePath, qdrant.QdrantHTTPPort)).
+						WithLivenessProbe(resources.WithHTTPProbe(qdrant.QdrantLivenessProbePath, qdrant.QdrantHTTPPort)).
 						WithEnv(envs...).
 						WithResources(corev1ac.ResourceRequirements().WithRequests(corev1.ResourceList{
 							corev1.ResourceMemory: QdrantClusterDefaultMemory,

@@ -63,6 +63,7 @@ func NewRunCmd() *cobra.Command {
 	return &cmd
 }
 
+//nolint:perfsprint
 func run(ctx context.Context, manager manager.Manager, opts controller.Options) error {
 	l := ctrl.Log.WithName("run")
 	l.Info(fmt.Sprintf("Go Version: %s", runtime.Version()))

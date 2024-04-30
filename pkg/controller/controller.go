@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"net/http/pprof"
 	"os"
-	"time"
 
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 
+	"github.com/megacamelus/qdrant-operator/pkg/defaults"
 	"github.com/megacamelus/qdrant-operator/pkg/logger"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
@@ -82,8 +82,8 @@ func Start(options Options, setup func(manager.Manager, Options) error) error {
 
 		server := &http.Server{
 			Addr:         options.PprofAddr,
-			ReadTimeout:  10 * time.Second,
-			WriteTimeout: 10 * time.Second,
+			ReadTimeout:  defaults.ReadTimeout,
+			WriteTimeout: defaults.WriteTimeout,
 			Handler:      mux,
 		}
 

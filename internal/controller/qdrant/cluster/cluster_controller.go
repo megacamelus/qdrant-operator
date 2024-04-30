@@ -132,7 +132,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, res *qdrantApi.Cluster) (ctr
 		// Add finalizer
 		//
 
-		if controllerutil.AddFinalizer(rr.Cluster, defaults.KaotoFinalizerName) {
+		if controllerutil.AddFinalizer(rr.Cluster, defaults.FinalizerName) {
 			if err := r.Update(ctx, rr.Cluster); err != nil {
 				if k8serrors.IsConflict(err) {
 					return ctrl.Result{}, err
@@ -158,7 +158,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, res *qdrantApi.Cluster) (ctr
 		// Handle finalizer
 		//
 
-		if controllerutil.RemoveFinalizer(rr.Cluster, defaults.KaotoFinalizerName) {
+		if controllerutil.RemoveFinalizer(rr.Cluster, defaults.FinalizerName) {
 			if err := r.Update(ctx, rr.Cluster); err != nil {
 				if k8serrors.IsConflict(err) {
 					return ctrl.Result{}, err

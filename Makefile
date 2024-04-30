@@ -6,7 +6,7 @@
 VERSION ?= 0.0.5
 
 LINT_GOGC := 10
-LINT_DEADLINE := 10m
+LINT_TIMEOUT := 10m
 
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PROJECT_PATH := $(patsubst %/,%,$(dir $(MKFILE_PATH)))
@@ -148,8 +148,8 @@ check/lint: golangci-lint
 	@$(GOLANG_LINT) run \
 		--config .golangci.yml \
 		--out-format tab \
-		--skip-dirs etc \
-		--deadline $(LINT_DEADLINE) \
+		--exclude-dirs etc \
+		--timeout $(LINT_TIMEOUT) \
 		--verbose
 
 .PHONY: check/lint/fix
@@ -157,8 +157,8 @@ check/lint/fix: golangci-lint
 	@$(GOLANG_LINT) run \
 		--config .golangci.yml \
 		--out-format tab \
-		--skip-dirs etc \
-		--deadline $(LINT_DEADLINE) \
+		--exclude-dirs etc \
+		--timeoout $(LINT_TIMEOUT) \
 		--fix
 
 .PHONY: docker-build
@@ -215,12 +215,13 @@ OPM ?= $(LOCALBIN)/opm
 CRANE ?= $(LOCALBIN)/crane
 
 ## Tool Versions
-KUSTOMIZE_VERSION ?= v5.3.0
-CONTROLLER_TOOLS_VERSION ?= v0.14.0
-CODEGEN_VERSION ?= v0.29.1
-GOLANG_LINT_VERSION ?= v1.55.2
-OPERATOR_SDK_VERSION ?= v1.33.0
-OPM_VERSION ?= v1.23.0
+KUSTOMIZE_VERSION ?= v5.4.1
+CONTROLLER_TOOLS_VERSION ?= v0.15.0
+CODEGEN_VERSION ?= v0.30.0
+#GOLANG_LINT_VERSION ?= v1.57.2
+GOLANG_LINT_VERSION ?= master
+OPERATOR_SDK_VERSION ?= v1.34.1
+OPM_VERSION ?= v1.34.1
 
 KUSTOMIZE_INSTALL_SCRIPT ?= "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"
 
