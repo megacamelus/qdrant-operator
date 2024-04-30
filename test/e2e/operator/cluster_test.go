@@ -1,6 +1,8 @@
 package operator
 
 import (
+	"encoding/json"
+	"github.com/lburgazzoli/gomega-matchers/pkg/matchers/jq"
 	"testing"
 
 	"github.com/rs/xid"
@@ -9,7 +11,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 
 	. "github.com/megacamelus/qdrant-operator/test/support"
-	. "github.com/megacamelus/qdrant-operator/test/support/matchers"
 	. "github.com/onsi/gomega"
 
 	qdrantAc "github.com/megacamelus/qdrant-operator/pkg/client/applyconfiguration/qdrant/v1alpha1"
@@ -34,8 +35,8 @@ func TestClusterDeploy(t *testing.T) {
 		WithTransform(ConditionStatus(appsv1.DeploymentAvailable), Equal(corev1.ConditionTrue)))
 
 	test.Eventually(Cluster(test, cluster), TestTimeoutLong).Should(
-		WithTransform(AsJSON(), And(
-			MatchJQ(`.status.phase == "Ready"`),
+		WithTransform(json.Marshal, And(
+			jq.Match(`.status.phase == "Ready"`),
 		)),
 	)
 }
@@ -57,8 +58,8 @@ func TestCollectionDeploy(t *testing.T) {
 		WithTransform(ConditionStatus(appsv1.DeploymentAvailable), Equal(corev1.ConditionTrue)))
 
 	test.Eventually(Cluster(test, cluster), TestTimeoutLong).Should(
-		WithTransform(AsJSON(), And(
-			MatchJQ(`.status.phase == "Ready"`),
+		WithTransform(json.Marshal, And(
+			jq.Match(`.status.phase == "Ready"`),
 		)),
 	)
 
@@ -75,9 +76,9 @@ func TestCollectionDeploy(t *testing.T) {
 	)
 
 	test.Eventually(Collection(test, collection), TestTimeoutLong).Should(
-		WithTransform(AsJSON(), And(
-			MatchJQ(`.status.phase == "Ready"`),
-			MatchJQ(`.status.collection.status == "Green"`),
+		WithTransform(json.Marshal, And(
+			jq.Match(`.status.phase == "Ready"`),
+			jq.Match(`.status.collection.status == "Green"`),
 		)),
 	)
 }

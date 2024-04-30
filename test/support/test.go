@@ -53,7 +53,7 @@ func With(t *testing.T) Test {
 	t.Helper()
 
 	lr := testr.New(t)
-	klog.SetLogger(lr.WithName("client"))
+	klog.SetLogger(lr.WithName("test"))
 
 	ctx := context.Background()
 	if deadline, ok := t.Deadline(); ok {
