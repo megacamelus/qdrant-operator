@@ -3,10 +3,11 @@ package cluster
 import (
 	"context"
 
+	"github.com/megacamelus/qdrant-operator/pkg/resources"
+
 	"sigs.k8s.io/yaml"
 
 	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
-	"github.com/megacamelus/qdrant-operator/pkg/apply"
 	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
 	"k8s.io/apimachinery/pkg/api/meta"
 
@@ -86,7 +87,7 @@ func (a *deployConfigAction) configMap(rr *ReconciliationRequest) (*corev1ac.Con
 	}
 
 	cm := corev1ac.ConfigMap(rr.Cluster.Name, rr.Cluster.Namespace).
-		WithOwnerReferences(apply.WithOwnerReference(rr.Cluster)).
+		WithOwnerReferences(resources.WithOwnerReference(rr.Cluster)).
 		WithLabels(labels).
 		WithData(map[string]string{
 			"config": config,

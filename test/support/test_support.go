@@ -20,6 +20,9 @@ const (
 	TestTimeoutShort  = 1 * time.Minute
 	TestTimeoutMedium = 2 * time.Minute
 	TestTimeoutLong   = 5 * time.Minute
+
+	TestPollingInterval      = 500 * time.Millisecond
+	TestConsistentlyDuration = 500 * time.Millisecond
 )
 
 func runCleanup(t Test, in runtime.Object) error {

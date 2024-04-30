@@ -20,7 +20,6 @@ import (
 	"context"
 	"fmt"
 	"sort"
-	"time"
 
 	"github.com/go-logr/logr"
 	"github.com/megacamelus/qdrant-operator/pkg/defaults"
@@ -127,7 +126,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, res *qdrantApi.Collection) (
 		// Add finalizer
 		//
 
-		if controllerutil.AddFinalizer(rr.Collection, defaults.KaotoFinalizerName) {
+		if controllerutil.AddFinalizer(rr.Collection, defaults.FinalizerName) {
 			if err := r.Update(ctx, rr.Collection); err != nil {
 				if k8serrors.IsConflict(err) {
 					return ctrl.Result{}, err
@@ -145,7 +144,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, res *qdrantApi.Collection) (
 		for i := len(r.actions) - 1; i >= 0; i-- {
 			if err := r.actions[i].Cleanup(ctx, &rr); err != nil {
 				l.Info("Failure while performing cleanup, retrying in 5 sec")
-				return ctrl.Result{RequeueAfter: 5 * time.Second}, err
+				return ctrl.Result{RequeueAfter: defaults.RequeueDuration}, err
 			}
 		}
 
@@ -153,7 +152,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, res *qdrantApi.Collection) (
 		// Handle finalizer
 		//
 
-		if controllerutil.RemoveFinalizer(rr.Collection, defaults.KaotoFinalizerName) {
+		if controllerutil.RemoveFinalizer(rr.Collection, defaults.FinalizerName) {
 			if err := r.Update(ctx, rr.Collection); err != nil {
 				if k8serrors.IsConflict(err) {
 					return ctrl.Result{}, err

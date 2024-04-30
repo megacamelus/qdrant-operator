@@ -17,7 +17,7 @@ import (
 
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 
-	qdratClient "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned"
+	qdratClient "github.com/megacamelus/qdrant-operator/pkg/client/clientset/versioned"
 	apiextClient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1"
 )
 

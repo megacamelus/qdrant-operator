@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/megacamelus/qdrant-operator/internal/controller/qdrant"
-	"github.com/megacamelus/qdrant-operator/pkg/apply"
 	"github.com/megacamelus/qdrant-operator/pkg/controller/client"
+	"github.com/megacamelus/qdrant-operator/pkg/resources"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -63,7 +63,7 @@ func (a *serviceAction) Apply(ctx context.Context, rr *ReconciliationRequest) er
 
 func (a *serviceAction) service(ctx context.Context, rr *ReconciliationRequest) error {
 	service := corev1ac.Service(rr.Cluster.Name, rr.Cluster.Namespace).
-		WithOwnerReferences(apply.WithOwnerReference(rr.Cluster)).
+		WithOwnerReferences(resources.WithOwnerReference(rr.Cluster)).
 		WithLabels(Labels(rr.Cluster)).
 		WithSpec(corev1ac.ServiceSpec().
 			WithPorts(

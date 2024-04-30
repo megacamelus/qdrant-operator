@@ -2,7 +2,7 @@ package support
 
 import (
 	qdrantApi "github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1"
-	qdrantAc "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
+	qdrantAc "github.com/megacamelus/qdrant-operator/pkg/client/applyconfiguration/qdrant/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
 

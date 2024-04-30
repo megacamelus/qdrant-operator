@@ -8,36 +8,42 @@ PROJECT_ROOT="$1"
 TMP_DIR=$( mktemp -d -t qdrant-client-gen-XXXXXXXX )
 
 mkdir -p "${TMP_DIR}/client"
-mkdir -p "${PROJECT_ROOT}/pkg/client/qdrant"
+mkdir -p "${PROJECT_ROOT}/pkg/client"
 
+echo "tmp dir: $TMP_DIR"
+
+echo "applyconfiguration-gen"
 "${PROJECT_ROOT}"/bin/applyconfiguration-gen \
   --go-header-file="${PROJECT_ROOT}/hack/boilerplate.go.txt" \
-  --output-base="${TMP_DIR}/client" \
-  --input-dirs=github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1 \
-  --output-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration
+  --output-dir="${TMP_DIR}/client/applyconfiguration" \
+  --output-pkg=github.com/megacamelus/qdrant-operator/pkg/client/applyconfiguration \
+  github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1
 
+echo "client-gen"
 "${PROJECT_ROOT}"/bin/client-gen \
   --go-header-file="${PROJECT_ROOT}/hack/boilerplate.go.txt" \
-  --output-base="${TMP_DIR}/client" \
+  --output-dir="${TMP_DIR}/client/clientset" \
+  --input-base=github.com/megacamelus/qdrant-operator/api \
   --input=qdrant/v1alpha1 \
   --clientset-name "versioned" \
-  --input-base=github.com/megacamelus/qdrant-operator/api \
-  --apply-configuration-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration \
-  --output-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset
+  --apply-configuration-package=github.com/megacamelus/qdrant-operator/pkg/client/applyconfiguration \
+  --output-pkg=github.com/megacamelus/qdrant-operator/pkg/client/clientset
 
+echo "lister-gen"
 "${PROJECT_ROOT}"/bin/lister-gen \
   --go-header-file="${PROJECT_ROOT}/hack/boilerplate.go.txt" \
-  --output-base="${TMP_DIR}/client" \
-  --input-dirs=github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1 \
-  --output-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/listers
+  --output-dir="${TMP_DIR}/client/listers" \
+  --output-pkg=github.com/megacamelus/qdrant-operator/pkg/client/listers \
+  github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1 \
 
+echo "informer-gen"
 "${PROJECT_ROOT}"/bin/informer-gen \
   --go-header-file="${PROJECT_ROOT}/hack/boilerplate.go.txt" \
-  --output-base="${TMP_DIR}/client" \
-  --input-dirs=github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1 \
-  --versioned-clientset-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/clientset/versioned \
-  --listers-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/listers \
-  --output-package=github.com/megacamelus/qdrant-operator/pkg/client/qdrant/informers
+  --output-dir="${TMP_DIR}/client/informers" \
+  --versioned-clientset-package=github.com/megacamelus/qdrant-operator/pkg/client/clientset/versioned \
+  --listers-package=github.com/megacamelus/qdrant-operator/pkg/client/listers \
+  --output-pkg=github.com/megacamelus/qdrant-operator/pkg/client/informers \
+  github.com/megacamelus/qdrant-operator/api/qdrant/v1alpha1
 
 
 # This should not be needed but for some reasons, the applyconfiguration-gen tool
@@ -47,12 +53,12 @@ mkdir -p "${PROJECT_ROOT}/pkg/client/qdrant"
 # See: https://github.com/kubernetes/code-generator/issues/150
 sed -i \
   's/WithAPIVersion(\"qdrant\/v1alpha1\")/WithAPIVersion(\"qdrant.megacamelus.github.io\/v1alpha1\")/g' \
-  "${TMP_DIR}"/client/github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1/cluster.go
+  "${TMP_DIR}"/client/applyconfiguration/qdrant/v1alpha1/cluster.go
 sed -i \
   's/WithAPIVersion(\"qdrant\/v1alpha1\")/WithAPIVersion(\"qdrant.megacamelus.github.io\/v1alpha1\")/g' \
-  "${TMP_DIR}"/client/github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1/collection.go
+  "${TMP_DIR}"/client/applyconfiguration/qdrant/v1alpha1/collection.go
 
 
 cp -R \
-  "${TMP_DIR}"/client/github.com/megacamelus/qdrant-operator/pkg/client/qdrant/* \
-  "${PROJECT_ROOT}"/pkg/client/qdrant
+  "${TMP_DIR}"/client/* \
+  "${PROJECT_ROOT}"/pkg/client

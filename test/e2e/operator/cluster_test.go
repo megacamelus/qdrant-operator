@@ -12,7 +12,7 @@ import (
 	. "github.com/megacamelus/qdrant-operator/test/support/matchers"
 	. "github.com/onsi/gomega"
 
-	qdrantAc "github.com/megacamelus/qdrant-operator/pkg/client/qdrant/applyconfiguration/qdrant/v1alpha1"
+	qdrantAc "github.com/megacamelus/qdrant-operator/pkg/client/applyconfiguration/qdrant/v1alpha1"
 
 	pb "github.com/qdrant/go-client/qdrant"
 )

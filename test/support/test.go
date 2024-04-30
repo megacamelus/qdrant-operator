@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"sync"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/go-cleanhttp"
 
@@ -71,9 +70,9 @@ func With(t *testing.T) Test {
 		cleanup: make([]func() []runtime.Object, 0),
 	}
 
-	answer.SetDefaultEventuallyPollingInterval(500 * time.Millisecond)
+	answer.SetDefaultEventuallyPollingInterval(TestPollingInterval)
 	answer.SetDefaultEventuallyTimeout(TestTimeoutLong)
-	answer.SetDefaultConsistentlyDuration(500 * time.Millisecond)
+	answer.SetDefaultConsistentlyDuration(TestConsistentlyDuration)
 	answer.SetDefaultConsistentlyDuration(TestTimeoutLong)
 
 	t.Cleanup(func() {
