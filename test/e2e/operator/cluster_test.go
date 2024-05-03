@@ -2,8 +2,9 @@ package operator
 
 import (
 	"encoding/json"
-	"github.com/lburgazzoli/gomega-matchers/pkg/matchers/jq"
 	"testing"
+
+	"github.com/lburgazzoli/gomega-matchers/pkg/matchers/jq"
 
 	"github.com/rs/xid"
 
