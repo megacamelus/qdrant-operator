@@ -62,8 +62,7 @@ func WithCollectionsClient(ctx context.Context, rr *ReconciliationRequest, f fun
 	newCtx, cancel := context.WithTimeout(ctx, defaults.ContextTimeout)
 	defer cancel()
 
-	conn, err := grpc.DialContext(
-		newCtx,
+	conn, err := grpc.NewClient(
 		endpointURL,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
