@@ -9,7 +9,7 @@ require (
 	github.com/onsi/gomega v1.33.1
 	github.com/qdrant/go-client v1.9.0
 	github.com/rs/xid v1.5.0
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	go.uber.org/multierr v1.11.0
 	google.golang.org/grpc v1.64.0
 	k8s.io/api v0.30.1
