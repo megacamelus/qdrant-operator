@@ -6,7 +6,7 @@ require (
 	github.com/go-logr/logr v1.4.2
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/lburgazzoli/gomega-matchers v0.0.0-20240423094204-d014cfe52a16
-	github.com/onsi/gomega v1.33.1
+	github.com/onsi/gomega v1.34.0
 	github.com/qdrant/go-client v1.9.0
 	github.com/rs/xid v1.5.0
 	github.com/spf13/cobra v1.8.1
