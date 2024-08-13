@@ -7,7 +7,7 @@ require (
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/lburgazzoli/gomega-matchers v0.0.0-20240423094204-d014cfe52a16
 	github.com/onsi/gomega v1.33.1
-	github.com/qdrant/go-client v1.9.0
+	github.com/qdrant/go-client v1.11.0
 	github.com/rs/xid v1.5.0
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/multierr v1.11.0
